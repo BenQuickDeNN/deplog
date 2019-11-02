@@ -51,12 +51,11 @@ int yylex();
 %left '+' '-'
 %left '*' '/' '%'
 
-%type <intval> decl_stmt bin_expr factor expr sentence id_list assign_stmt
+%type <intval> decl_stmt bin_expr factor expr sentence id_list assign_stmt loop
 
 %start statement
 
 %%
-
     /* rule */
 statement: sentence ';'         { printf("STMT\n"); }
     | statement sentence ';'
@@ -106,18 +105,22 @@ type_dec: INT       { printf("TYPE:INT\n"); }
 
 int main(int argc, const char *args[])
 {
-	/* 将注释去掉就能看到stack具体是怎么工作的.. */
-    /* yydebug = 1; */
+    if (argc != 2)
+    {
+        fprintf(stderr, "Useage: [./]ccompiler [file]\r\n");
+        exit(2);
+    }
+    // yydebug = 1;
 
 	extern FILE *yyin;
-	if(argc > 1 && (yyin = fopen(args[1], "r")) == NULL) {
+	if ((yyin = fopen(args[1], "r")) == NULL)
+    {
 		fprintf(stderr, "can not open %s\n", args[1]);
 		exit(1);
 	}
-	if(yyparse()) {
+	if (yyparse())
 		exit(-1);
-	}
-	
+	fclose(yyin);
     return 0;
 }
 
@@ -128,7 +131,7 @@ void yyerror(char *s, ...)
     va_list ap;
     va_start(ap, s);
 
-    fprintf(stderr, "%d: error: ", yylineno);
+    fprintf(stderr, "row %d: error: ", yylineno);
     vfprintf(stderr, s, ap);
     fprintf(stderr, "\n");
 }
