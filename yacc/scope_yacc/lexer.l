@@ -42,7 +42,8 @@ sizeof          { return SIZEOF; }
 static          { return STATIC; }
 struct          { return STRUCT; }
 switch          { return SWITCH; }
-typedef         { return UNION; }
+typedef         { return TYPEDEF; }
+union           { return UNION; }
 unsigned        { return UNSIGNED; }
 void            { return VOID; }
 volatile        { return VOLATILE; }
@@ -61,7 +62,7 @@ _Static_assert  { return _STATIC_ASSERT; }
 _Noreturn       { return _NORETURN; }
 _Thread_local   { return _THREAD_LOCAL; }
 _Generic        { return _GENERIC; }
-    /* nonterminal symbols */
+    /* dynamic token */
     /* variable */
 [a-zA-Z][a-zA-Z0-9_]*   { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return IDENTITY; }
     /* number */
