@@ -87,6 +87,7 @@ _Generic        { return _GENERIC; }
 "||"                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return OR; }
 "!"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return NEGATIVE; }
 "="                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN; }
+":"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return COLON; }
     /* comments */
 "//".*;
 "/*"                    { printf("lexer: yytext = %s\n", yytext); old_status = YY_START; BEGIN COMMENT; }
