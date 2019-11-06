@@ -312,5 +312,14 @@ selection_stat              :   IF PARENTHESE_L exp PARENTHESE_R stat           
                             |   SWITCH PARENTHESE_L exp PARENTHESE_R stat                   { printf("selection_stat -> SWITCH PARENTHESE_L exp PARENTHESE_R stat\r\n"); }
                             ;
 iteration_stat              :   WHILE PARENTHESE_L exp PARENTHESE_R stat                    { printf("iteration_stat -> WHILE PARENTHESE_L exp PARENTHESE_R stat\r\n"); }
-
+                            |   DO stat WHILE PARENTHESE_L exp PARENTHESE_R SEMI            { printf("iteration_stat -> DO stat WHILE PARENTHESE_L exp PARENTHESE_R SEMI\r\n"); }
+                            |   FOR PARENTHESE_L exp SEMI exp SEMI exp PARENTHESE_R stat    { printf("iteration_stat -> FOR PARENTHESE_L exp SEMI exp SEMI exp PARENTHESE_R stat\r\n"); }
+                            |   FOR PARENTHESE_L exp SEMI exp SEMI PARENTHESE_R stat        { printf("iteration_stat -> FOR PARENTHESE_L exp SEMI exp SEMI PARENTHESE_R stat\r\n"); }
+                            |   FOR PARENTHESE_L exp SEMI SEMI exp PARENTHESE_R stat        { printf("iteration_stat -> FOR PARENTHESE_L exp SEMI SEMI exp PARENTHESE_R stat\r\n"); }
+                            |   FOR PARENTHESE_L exp SEMI SEMI PARENTHESE_R stat            { printf("iteration_stat -> FOR PARENTHESE_L exp SEMI SEMI PARENTHESE_R stat\r\n"); }
+                            |   FOR PARENTHESE_L SEMI exp SEMI exp PARENTHESE_R stat        { printf("iteration_stat -> FOR PARENTHESE_L SEMI exp SEMI exp PARENTHESE_R stat\r\n"); }
+                            |   FOR PARENTHESE_L SEMI exp SEMI PARENTHESE_R stat            { printf("iteration_stat -> FOR PARENTHESE_L SEMI exp SEMI PARENTHESE_R stat\r\n"); }
+                            |   FOR PARENTHESE_L SEMI SEMI exp PARENTHESE_R stat            { printf("iteration_stat -> FOR PARENTHESE_L SEMI SEMI exp PARENTHESE_R stat\r\n"); }
+                            |   FOR PARENTHESE_L SEMI SEMI PARENTHESE_R stat                { printf("iteration_stat -> FOR PARENTHESE_L SEMI SEMI PARENTHESE_R stat\r\n"); }
+                            ;
 %%
