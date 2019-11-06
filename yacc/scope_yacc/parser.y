@@ -322,4 +322,10 @@ iteration_stat              :   WHILE PARENTHESE_L exp PARENTHESE_R stat        
                             |   FOR PARENTHESE_L SEMI SEMI exp PARENTHESE_R stat            { printf("iteration_stat -> FOR PARENTHESE_L SEMI SEMI exp PARENTHESE_R stat\r\n"); }
                             |   FOR PARENTHESE_L SEMI SEMI PARENTHESE_R stat                { printf("iteration_stat -> FOR PARENTHESE_L SEMI SEMI PARENTHESE_R stat\r\n"); }
                             ;
+jump_stat                   :   GOTO IDENTITY SEMI                                          { printf("jump_stat -> GOTO IDENTITY SEMI\r\n"); }
+                            |   CONTINUE SEMI                                               { printf("jump_stat -> CONTINUE SEMI\r\n"); }
+                            |   BREAK SEMI                                                  { printf("jump_stat -> BREAK SEMI\r\n"); }
+                            |   RETURN exp SEMI                                             { printf("jump_stat -> RETURN exp SEMI\r\n"); }
+                            |   RETURN SEMI                                                 { printf("jump_stat -> RETURN SEMI\r\n"); }
+                            ;
 %%
