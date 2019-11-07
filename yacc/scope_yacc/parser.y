@@ -70,30 +70,35 @@ int yylex();
 %token _NORETURN
 %token _THREAD_LOCAL
 %token _GENERIC
+
+%token COMMA
+%token DOT
+%token SEMI
+%token PARENTHESE_L
+%token PARENTHESE_R
+%token BRACKET_L
+%token BRACKET_R
+%token BRACE_L
+%token BRACE_R
+%token AND
+%token OR
+%token NOT
+%token ASSIGN_OP
+%token ASSIGN
+%token QUES
     /* dynamic token */
 %token <strval> IDENTITY
 %token <strval> NUMBER
 %token <strval> STRING
 %token <strval> BIN_OPERATOR
-%token <strval> COMMA
-%token <strval> DOT
-%token <strval> SEMI
-%token <strval> PARENTHESE_L
-%token <strval> PARENTHESE_R
-%token <strval> BRACKET_L
-%token <strval> BRACKET_R
-%token <strval> BRACE_L
-%token <strval> BRACE_R
-%token <strval> AND
-%token <strval> OR
-%token <strval> NEGATIVE
-%token <strval> ASSIGN
 %token <strval> FORMAT_SYMBOL
 
     /* nonterminal symbols */
 %type <intval> abstract_declarator
 %type <intval> assignment_exp
+%type <intval> assignment_operator
 %type <intval> compound_stat
+%type <intval> conditional_exp
 %type <intval> const_exp
 %type <intval> decl
 %type <intval> declarator
@@ -116,6 +121,7 @@ int yylex();
 %type <intval> iteration_stat
 %type <intval> jump_stat
 %type <intval> labeled_stat
+%type <intval> logical_or_exp
 %type <intval> param_decl
 %type <intval> param_list
 %type <intval> param_type_list
@@ -136,6 +142,7 @@ int yylex();
 %type <intval> type_qualifier_list
 %type <intval> type_qualifier
 %type <intval> type_spec
+%type <intval> unary_exp
 
 %start translation_unit
 
@@ -327,5 +334,17 @@ jump_stat                   :   GOTO IDENTITY SEMI                              
                             |   BREAK SEMI                                                  { printf("jump_stat -> BREAK SEMI\r\n"); }
                             |   RETURN exp SEMI                                             { printf("jump_stat -> RETURN exp SEMI\r\n"); }
                             |   RETURN SEMI                                                 { printf("jump_stat -> RETURN SEMI\r\n"); }
+                            ;
+exp                         :   assignment_exp                                              { printf("exp -> assignment_exp\r\n"); }
+                            |   exp COMMA assignment_exp                                    { printf("exp -> exp COMMA assignment_exp\r\n"); }
+                            ;
+assignment_exp              :   conditional_exp                                             { printf("assignment_exp -> conditional_exp\r\n"); }
+                            |   unary_exp assignment_operator assignment_exp                { printf("assignment_exp -> unary_exp assignment_operator assignment_exp\r\n"); }
+                            ;
+assignment_operator         :   ASSIGN                                                      { printf("assignment_operator -> ASSIGN\r\n"); }
+                            |   ASSIGN_OP                                                   { printf("assignment_operator -> ASSIGN_OP\r\n"); }
+                            ;
+conditional_exp             :   logical_or_exp                                              { printf("conditional_exp -> logical_or_exp\r\n"); }
+                            |   logical_or_exp QUES exp COLON                               { printf("conditional_exp -> logical_or_exp QUES exp COLON\r\n"); }
                             ;
 %%

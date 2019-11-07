@@ -73,8 +73,8 @@ _Generic        { return _GENERIC; }
     /* errors */
 \"(\\.|[^"\n])*$        { yyerror("Unterminated string %s", yytext); }
     /* operators */
-[-+&~|^/%*]             { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return BIN_OPERATOR; }
 ","                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return COMMA; }
+"..."                   { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ELLIPSIS;}
 "."                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return DOT; }
 ";"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return SEMI; }
 "("                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return PARENTHESE_L; }
@@ -85,10 +85,12 @@ _Generic        { return _GENERIC; }
 "}"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return BRACE_R; }
 "&&"                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return AND; }
 "||"                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return OR; }
-"!"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return NEGATIVE; }
+"!"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return NOT; }
+[-+&~|^/%*]=            { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN_OP }
 "="                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN; }
 ":"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return COLON; }
-"..."                   { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ELLIPSIS;}
+"?"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return QUES; }
+[-+&~|^/%*]             { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return BIN_OPERATOR; }
     /* comments */
 "//".*;
 "/*"                    { printf("lexer: yytext = %s\n", yytext); old_status = YY_START; BEGIN COMMENT; }
