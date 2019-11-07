@@ -123,6 +123,7 @@ int yylex();
 %type <intval> compound_stat
 %type <intval> conditional_exp
 %type <intval> const_exp
+%type <intval> const_type
 %type <intval> decl
 %type <intval> declarator
 %type <intval> decl_list
@@ -446,5 +447,15 @@ postfix_exp                 :   primary_exp                                     
                             |   postfix_exp POST_ADD                                        { printf("postfix_exp -> postfix_exp POST_ADD\r\n"); }
                             |   postfix_exp POST_SUB                                        { printf("postfix_exp -> postfix_exp POST_SUB\r\n"); }
                             ;
-
+primary_exp                 :   IDENTITY                                                    { printf("primary_exp -> IDENTITY\r\n"); }
+                            |   const_type                                                  { printf("primary_exp -> const_type\r\n"); }
+                            |   STRING                                                      { printf("primary_exp -> STRING\r\n"); }
+                            |   PARENTHESE_L exp PARENTHESE_R                               { printf("primary_exp -> PARENTHESE_L exp PARENTHESE_R\r\n"); }
+                            ;
+argument_exp_list           :   assignment_exp                                              { printf("argument_exp_list -> assignment_exp\r\n"); }
+                            |   argument_exp_list COMMA assignment_exp                      { printf("argument_exp_list -> argument_exp_list COMMA assignment_exp\r\n"); }
+                            ;
+const_type                  :   NUMBER                                                      { printf("const_type -> NUMBER\r\n"); }
+                            |   STRING                                                      { printf("const_type -> STRING\r\n"); }
+                            |   FORMAT_SYMBOL                                               { printf("const_type -> FORMAT_SYMBOL\r\n"); }
 %%
