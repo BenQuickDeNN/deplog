@@ -73,6 +73,34 @@ _Generic        { return _GENERIC; }
     /* errors */
 \"(\\.|[^"\n])*$        { yyerror("Unterminated string %s", yytext); }
     /* operators */
+[-+&~|^/%*]=            { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN_OP; }
+"<<="                   { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN_OP; }
+">>="                   { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN_OP; }
+"=="                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return EQUAL; }
+"<="                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return LEQUAL; }
+">="                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return GEQUAL; }
+"<<"                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return MOVE_L; }
+">>"                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return MOVE_R; }
+"->"                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return PELEMENT; }
+"<"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return LESSER; }
+">"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return GREATER; }
+"!="                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return NOT_EQUAL; }
+"="                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN; }
+":"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return COLON; }
+"?"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return QUES; }
+"&&"                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return AND; }
+"||"                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return OR; }
+"&"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return AND_OP; }
+"|"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return OR_OP; }
+"^"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return XOR_OP; }
+"++"                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return POST_ADD; }
+"--"                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return POST_SUB; }
+"+"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ADD; }
+"-"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return SUB; }
+"*"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return MUL; }
+"/"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return DIV; }
+"%"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return MOD; }
+"~"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return NEG; }
 ","                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return COMMA; }
 "..."                   { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ELLIPSIS;}
 "."                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return DOT; }
@@ -83,14 +111,7 @@ _Generic        { return _GENERIC; }
 "]"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return BRACKET_R; }
 "{"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return BRACE_L; }
 "}"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return BRACE_R; }
-"&&"                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return AND; }
-"||"                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return OR; }
 "!"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return NOT; }
-[-+&~|^/%*]=            { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN_OP }
-"="                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN; }
-":"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return COLON; }
-"?"                     { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return QUES; }
-[-+&~|^/%*]             { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return BIN_OPERATOR; }
     /* comments */
 "//".*;
 "/*"                    { printf("lexer: yytext = %s\n", yytext); old_status = YY_START; BEGIN COMMENT; }

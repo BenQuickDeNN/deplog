@@ -70,19 +70,39 @@ int yylex();
 %token _NORETURN
 %token _THREAD_LOCAL
 %token _GENERIC
-
+    /* operator */
+%token ADD
+%token SUB
+%token MUL
+%token DIV
+%token MOD
+%token NEG
 %token COMMA
 %token DOT
 %token SEMI
 %token PARENTHESE_L
 %token PARENTHESE_R
+%token PELEMENT
+%token POST_ADD
+%token POST_SUB
 %token BRACKET_L
 %token BRACKET_R
 %token BRACE_L
 %token BRACE_R
 %token AND
+%token AND_OP
 %token OR
+%token OR_OP
+%token XOR_OP
 %token NOT
+%token EQUAL
+%token MOVE_L
+%token MOVE_R
+%token LESSER
+%token GREATER
+%token NOT_EQUAL
+%token LEQUAL
+%token GEQUAL
 %token ASSIGN_OP
 %token ASSIGN
 %token QUES
@@ -90,13 +110,16 @@ int yylex();
 %token <strval> IDENTITY
 %token <strval> NUMBER
 %token <strval> STRING
-%token <strval> BIN_OPERATOR
 %token <strval> FORMAT_SYMBOL
 
     /* nonterminal symbols */
 %type <intval> abstract_declarator
+%type <intval> additive_exp
+%type <intval> and_exp
+%type <intval> argument_exp_list
 %type <intval> assignment_exp
 %type <intval> assignment_operator
+%type <intval> cast_exp
 %type <intval> compound_stat
 %type <intval> conditional_exp
 %type <intval> const_exp
@@ -109,11 +132,14 @@ int yylex();
 %type <intval> enumerator
 %type <intval> enumerator_list
 %type <intval> enum_spec
+%type <intval> equality_exp
+%type <intval> exclusive_or_exp
 %type <intval> exp
 %type <intval> exp_stat
 %type <intval> external_decl
 %type <intval> function_definition
 %type <intval> id_list
+%type <intval> inclusive_or_exp
 %type <intval> initializer
 %type <intval> initializer_list
 %type <intval> init_declarator
@@ -121,12 +147,18 @@ int yylex();
 %type <intval> iteration_stat
 %type <intval> jump_stat
 %type <intval> labeled_stat
+%type <intval> logical_and_exp
 %type <intval> logical_or_exp
+%type <intval> mult_exp
 %type <intval> param_decl
 %type <intval> param_list
 %type <intval> param_type_list
 %type <intval> pointer
+%type <intval> postfix_exp
+%type <intval> primary_exp
+%type <intval> relational_exp
 %type <intval> selection_stat
+%type <intval> shift_expression
 %type <intval> spec_qualifier_list
 %type <intval> stat
 %type <intval> stat_list
@@ -143,6 +175,7 @@ int yylex();
 %type <intval> type_qualifier
 %type <intval> type_spec
 %type <intval> unary_exp
+%type <intval> unary_operator
 
 %start translation_unit
 
@@ -245,10 +278,10 @@ direct_declarator           :   IDENTITY                                        
                             |   direct_declarator PARENTHESE_L id_list PARENTHESE_R         { printf("direct_declarator -> direct_declarator PARENTHESE_L id_list PARENTHESE_R\r\n"); }
                             |   direct_declarator PARENTHESE_L PARENTHESE_R                 { printf("direct_declarator -> direct_declarator PARENTHESE_L PARENTHESE_R\r\n"); }
                             ;
-pointer                     :   '*' type_qualifier_list                                     { printf("pointer -> * type_qualifier_list\r\n"); }
-                            |   '*'                                                         { printf("pointer -> *\r\n"); }
-                            |   '*' type_qualifier_list pointer                             { printf("pointer -> * type_qualifier_list pointer\r\n"); }
-                            |   '*' pointer                                                 { printf("pointer -> * pointer\r\n"); }
+pointer                     :   MUL type_qualifier_list                                     { printf("pointer -> MUL type_qualifier_list\r\n"); }
+                            |   MUL                                                         { printf("pointer -> MUL\r\n"); }
+                            |   MUL type_qualifier_list pointer                             { printf("pointer -> MUL type_qualifier_list pointer\r\n"); }
+                            |   MUL pointer                                                 { printf("pointer -> MUL pointer\r\n"); }
                             ;
 type_qualifier_list         :   type_qualifier                                              { printf("type_qualifier_list -> type_qualifier\r\n"); }
                             |   type_qualifier_list type_qualifier                          { printf("type_qualifier_list -> type_qualifier_list type_qualifier\r\n"); }
@@ -347,4 +380,71 @@ assignment_operator         :   ASSIGN                                          
 conditional_exp             :   logical_or_exp                                              { printf("conditional_exp -> logical_or_exp\r\n"); }
                             |   logical_or_exp QUES exp COLON                               { printf("conditional_exp -> logical_or_exp QUES exp COLON\r\n"); }
                             ;
+const_exp                   :   conditional_exp                                             { printf("const_exp -> conditional_exp\r\n"); }
+                            ;
+logical_or_exp              :   logical_and_exp                                             { printf("logical_or_exp -> logical_and_exp\r\n"); }
+                            |   logical_or_exp OR logical_and_exp                           { printf("logical_or_exp -> logical_or_exp OR logical_and_exp\r\n"); }
+                            ;
+logical_and_exp             :   inclusive_or_exp                                            { printf("logical_and_exp -> inclusive_or_exp\r\n"); }
+                            |   logical_and_exp AND inclusive_or_exp                        { printf("logical_and_exp -> logical_and_exp AND inclusive_or_exp\r\n"); }
+                            ;
+inclusive_or_exp            :   exclusive_or_exp                                            { printf("inclusive_or_exp -> exclusive_or_exp\r\n"); }
+                            |   inclusive_or_exp OR_OP exclusive_or_exp                     { printf("inclusive_or_exp -> inclusive_or_exp OR_OP exclusive_or_exp\r\n"); }
+                            ;
+exclusive_or_exp            :   and_exp                                                     { printf("exclusive_or_exp -> and_exp\r\n"); }
+                            |   exclusive_or_exp XOR_OP and_exp                             { printf("exclusive_or_exp -> exclusive_or_exp XOR_OP and_exp\r\n"); }
+                            ;
+and_exp                     :   equality_exp                                                { printf("and_exp -> equality_exp\r\n"); }
+                            |   and_exp AND_OP equality_exp                                 { printf("and_exp -> and_exp AND_OP equality_exp\r\n"); }
+                            ;
+equality_exp                :   relational_exp                                              { printf("equality_exp -> relational_exp\r\n"); }
+                            |   equality_exp EQUAL relational_exp                           { printf("equality_exp -> equality_exp EQUAL relational_exp\r\n"); }
+                            |   equality_exp NOT_EQUAL relational_exp                       { printf("equality_exp -> equality_exp NOT_EQUAL relational_exp\r\n"); }
+                            ;
+relational_exp              :   shift_expression                                            { printf("relational_exp -> shift_expression\r\n"); }
+                            |   relational_exp LESSER shift_expression                      { printf("relational_exp -> relational_exp LESSER shift_expression\r\n"); }
+                            |   relational_exp GREATER shift_expression                     { printf("relational_exp -> relational_exp GREATER shift_expression\r\n"); }
+                            |   relational_exp LEQUAL shift_expression                      { printf("relational_exp -> relational_exp LEQUAL shift_expression\r\n"); }
+                            |   relational_exp GEQUAL shift_expression                      { printf("relational_exp -> relational_exp GEQUAL shift_expression\r\n"); }
+                            ;
+shift_expression            :   additive_exp                                                { printf("shift_expression -> additive_exp\r\n"); }
+                            |   shift_expression MOVE_L additive_exp                        { printf("shift_expression -> shift_expression MOVE_L additive_exp\r\n"); }
+                            |   shift_expression MOVE_R additive_exp                        { printf("shift_expression -> shift_expression MOVE_R additive_exp\r\n"); }
+                            ;
+additive_exp                :   mult_exp                                                    { printf("additive_exp -> mult_exp\r\n"); }
+                            |   additive_exp ADD mult_exp                                   { printf("additive_exp -> additive_exp ADD mult_exp\r\n"); }
+                            |   additive_exp SUB mult_exp                                   { printf("additive_exp -> additive_exp SUB mult_exp\r\n"); }
+                            ;
+mult_exp                    :   cast_exp                                                    { printf("mult_exp -> cast_exp\r\n"); }
+                            |   mult_exp MUL cast_exp                                       { printf("mult_exp -> mult_exp MUL cast_exp\r\n"); }
+                            |   mult_exp DIV cast_exp                                       { printf("mult_exp -> mult_exp DIV cast_exp\r\n"); }
+                            |   mult_exp MOD cast_exp                                       { printf("mult_exp -> mult_exp MOD cast_exp\r\n"); }
+                            ;
+cast_exp                    :   unary_exp                                                   { printf("cast_exp -> unary_exp\r\n"); }
+                            |   PARENTHESE_L type_name PARENTHESE_R cast_exp                { printf("cast_exp -> PARENTHESE_L type_name PARENTHESE_R cast_exp\r\n"); }
+                            ;
+unary_exp                   :   postfix_exp                                                 { printf("unary_exp -> postfix_exp\r\n"); }
+                            |   POST_ADD unary_exp                                          { printf("unary_exp -> POST_ADD unary_exp\r\n"); }
+                            |   POST_SUB unary_exp                                          { printf("unary_exp -> POST_SUB unary_exp\r\n"); }
+                            |   unary_operator cast_exp                                     { printf("unary_exp -> unary_operator cast_exp\r\n"); }
+                            |   SIZEOF unary_exp                                            { printf("unary_exp -> SIZEOF unary_exp\r\n"); }
+                            |   SIZEOF PARENTHESE_L type_name PARENTHESE_R                  { printf("unary_exp -> PARENTHESE_L type_name PARENTHESE_R\r\n"); }
+                            ;
+unary_operator              :   AND_OP                                                      { printf("unary_operator -> AND_OP\r\n"); }
+                            |   MUL                                                         { printf("unary_operator -> MUL\r\n"); }
+                            |   ADD                                                         { printf("unary_operator -> ADD\r\n"); }
+                            |   SUB                                                         { printf("unary_operator -> SUB\r\n"); }
+                            |   NEG                                                         { printf("unary_operator -> NEG\r\n"); }
+                            |   NOT                                                         { printf("unary_operator -> NOT\r\n"); }
+                            ;
+postfix_exp                 :   primary_exp                                                 { printf("postfix_exp -> primary_exp\r\n"); }
+                            |   postfix_exp BRACKET_L exp BRACKET_R                         { printf("postfix_exp -> postfix_exp BRACKET_L exp BRACKET_R\r\n"); }
+                            |   postfix_exp PARENTHESE_L argument_exp_list PARENTHESE_R     { printf("postfix_exp -> postfix_exp PARENTHESE_L argument_exp_list PARENTHESE_R\r\n"); }
+                            |   postfix_exp PARENTHESE_L PARENTHESE_R                       { printf("postfix_exp -> postfix_exp PARENTHESE_L PARENTHESE_R\r\n"); }
+                            |   postfix_exp DOT IDENTITY                                    { printf("postfix_exp -> postfix_exp DOT IDENTITY\r\n"); }
+                            |   postfix_exp PELEMENT IDENTITY                               { printf("postfix_exp -> postfix_exp PELEMENT IDENTITY\r\n"); }
+                            |   postfix_exp POST_ADD                                        { printf("postfix_exp -> postfix_exp POST_ADD\r\n"); }
+                            |   postfix_exp POST_SUB                                        { printf("postfix_exp -> postfix_exp POST_SUB\r\n"); }
+                            ;
+
 %%
