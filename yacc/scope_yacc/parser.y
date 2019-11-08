@@ -460,7 +460,7 @@ argument_exp_list           :   assignment_exp                                  
                             |   argument_exp_list COMMA assignment_exp                      { printf("argument_exp_list -> argument_exp_list COMMA assignment_exp\r\n"); }
                             ;
 const_type                  :   INT_NUM                                                     { printf("const_type -> INT_NUM(%s)\r\n", $1); }
-                            |   FLOAT_NUM                                                   { printf("const_type -> FLOAT_NUM(%s)\r\n", $1); }
+                            |   FLOAT_NUM                                                    { printf("const_type -> FLOAT_NUM(%s)\r\n", $1); }
                             |   STRING                                                      { printf("const_type -> STRING(%s)\r\n", $1); }
                             ;
 %%
