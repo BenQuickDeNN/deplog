@@ -108,8 +108,7 @@ int yylex();
 %token QUES
     /* dynamic token */
 %token <strval> IDENTITY
-%token <strval> INT_NUM
-%token <strval> FLOAT_NUM
+%token <strval> NUMBER
 %token <strval> STRING
 
     /* nonterminal symbols */
@@ -191,7 +190,7 @@ external_decl               :   function_definition                             
 function_definition         :   decl_specs declarator decl_list compound_stat               { printf("function_definition -> decl_specs declarator decl_list compound_stat\r\n"); }
                             |   declarator decl_list compound_stat                          { printf("function_definition -> declarator decl_list compound_stat\r\n"); }
                             |   decl_specs declarator compound_stat                         { printf("function_definition -> decl_specs declarator compound_stat\r\n"); }
-                            |   decl_specs declarator                                       { printf("function_definition -> declarator\r\n"); }
+                            |   decl_specs compound_stat                                    { printf("function_definition -> decl_specs compound_stat\r\n"); }
                             |   declarator compound_stat                                    { printf("function_definition -> declarator compound_stat\r\n"); }
                             ;
 decl                        :   decl_specs init_declarator_list SEMI                        { printf("decl -> decl_specs init_declarator_list SEMI\r\n"); }
@@ -203,10 +202,10 @@ decl_list                   :   decl                                            
 decl_specs                  :   storage_class_spec decl_specs                               { printf("decl_specs -> storage_class_spec decl_specs\r\n"); }
                             |   storage_class_spec                                          { printf("decl_specs -> storage_class_spec\r\n"); }
                             |   type_spec decl_specs                                        { printf("decl_specs -> type_spec decl_specs\r\n"); }
-                            |   type_spec direct_declarator                                 { printf("decl_specs -> type_spec direct_declarator\r\n"); }
                             |   type_spec                                                   { printf("decl_specs -> type_spec\r\n"); }
                             |   type_qualifier decl_specs                                   { printf("decl_specs -> type_qualifier decl_specs\r\n"); }
                             |   type_qualifier                                              { printf("decl_specs -> type_qualifier\r\n"); }
+                            |   PARENTHESE_L PARENTHESE_R                                   { printf("decl_specs -> PARENTHESE_L PARENTHESE_R\r\n"); }
                             ;
 storage_class_spec          :   AUTO                                                        { printf("storage_class_spec -> AUTO\r\n"); }
                             |   REGISTER                                                    { printf("storage_class_spec -> REGISTER\r\n"); }
@@ -230,9 +229,9 @@ type_spec                   :   VOID                                            
 type_qualifier              :   CONST                                                       { printf("type_qualifier -> CONST\r\n"); }
                             |   VOLATILE                                                    { printf("type_qualifier -> VOLATILE\r\n"); }
                             ;
-struct_or_union_spec        :   struct_or_union IDENTITY BRACE_L struct_decl_list BRACE_R   { printf("struct_or_union_spec -> struct_or_union IDENTITY(%s) BRACE_L struct_decl_list BRACE_R\r\n", $2); }
+struct_or_union_spec        :   struct_or_union IDENTITY BRACE_L struct_decl_list BRACE_R   { printf("struct_or_union_spec -> struct_or_union IDENTITY BRACE_L struct_decl_list BRACE_R\r\n"); }
                             |   struct_or_union BRACE_L struct_decl_list BRACE_R            { printf("struct_or_union_spec -> struct_or_union BRACE_L struct_decl_list BRACE_R\r\n"); }
-                            |   struct_or_union IDENTITY                                    { printf("struct_or_union_spec -> struct_or_union IDENTITY(%s)\r\n", $2); }
+                            |   struct_or_union IDENTITY                                    { printf("struct_or_union_spec -> struct_or_union IDENTITY\r\n"); }
                             ;
 struct_or_union             :   STRUCT                                                      { printf("struct_or_union -> STRUCT\r\n"); }
                             |   UNION                                                       { printf("struct_or_union -> UNION\r\n"); }
@@ -260,21 +259,20 @@ struct_declarator           :   declarator                                      
                             |   declarator COLON const_exp                                  { printf("struct_declarator -> declarator COLON const_exp\r\n"); }
                             |   COLON const_exp                                             { printf("struct_declarator -> COLON const_exp\r\n"); }
                             ;
-enum_spec                   :   ENUM IDENTITY BRACE_L enumerator_list BRACE_R               { printf("enum_spec -> ENUM IDENTITY(%s) BRACE_L enumerator_list BRACE_R\r\n", $2); }
+enum_spec                   :   ENUM IDENTITY BRACE_L enumerator_list BRACE_R               { printf("enum_spec -> ENUM IDENTITY BRACE_L enumerator_list BRACE_R\r\n"); }
                             |   ENUM BRACE_L enumerator_list BRACE_R                        { printf("enum_spec -> ENUM BRACE_L enumerator_list BRACE_R\r\n"); }
-                            |   ENUM IDENTITY                                               { printf("enum_spec -> ENUM IDENTITY(%s)\r\n", $2); }
+                            |   ENUM IDENTITY                                               { printf("enum_spec -> ENUM IDENTITY\r\n"); }
                             ;
 enumerator_list             :   enumerator                                                  { printf("enumerator_list -> enumerator\r\n"); }
                             |   enumerator_list COMMA enumerator                            { printf("enumerator_list -> enumerator_list COMMA enumerator\r\n"); }
                             ;
-enumerator                  :   IDENTITY                                                    { printf("enumerator -> IDENTITY(%s)\r\n", $1); }
-                            |   IDENTITY ASSIGN const_exp                                   { printf("enumerator -> IDENTITY(%s) ASSIGN const_exp\r\n", $1); }
+enumerator                  :   IDENTITY                                                    { printf("enumerator -> IDENTITY\r\n"); }
+                            |   IDENTITY ASSIGN const_exp                                   { printf("enumerator -> IDENTITY ASSIGN const_exp\r\n"); }
                             ;
 declarator                  :   pointer direct_declarator                                   { printf("declarator -> pointer direct_declarator\r\n"); }
                             |   direct_declarator                                           { printf("declarator -> direct_declarator\r\n"); }
-                            |   decl_specs                                                  { printf("declarator -> decl_specs\r\n"); }
                             ;
-direct_declarator           :   IDENTITY                                                    { printf("direct_declarator -> IDENTITY(%s)\r\n", $1); }
+direct_declarator           :   IDENTITY                                                    { printf("direct_declarator -> IDENTITY\r\n"); }
                             |   PARENTHESE_L declarator PARENTHESE_R                        { printf("direct_declarator -> PARENTHESE_L declarator PARENTHESE_R\r\n"); }
                             |   direct_declarator BRACKET_L const_exp BRACKET_R             { printf("direct_declarator -> direct_declarator BRACKET_L const_exp BRACKET_R\r\n"); }
                             |   direct_declarator BRACKET_L BRACKET_R                       { printf("direct_declarator -> direct_declarator BRACKET_L BRACKET_R\r\n"); }
@@ -300,8 +298,8 @@ param_decl                  :   decl_specs declarator                           
                             |   decl_specs abstract_declarator                              { printf("param_decl -> decl_specs abstract_declarator\r\n"); }
                             |   decl_specs                                                  { printf("param_decl -> decl_specs\r\n"); }
                             ;
-id_list                     :   IDENTITY                                                    { printf("id_list -> IDENTITY(%s)\r\n", $1); }
-                            |   id_list COMMA IDENTITY                                      { printf("id_list -> id_list COMMA IDENTITY(%s)\r\n", $3); }
+id_list                     :   IDENTITY                                                    { printf("id_list -> IDENTITY\r\n"); }
+                            |   id_list COMMA IDENTITY                                      { printf("id_list -> id_list COMMA IDENTITY\r\n"); }
                             ;
 initializer                 :   assignment_exp                                              { printf("initializer -> assignment_exp\r\n"); }
                             |   BRACE_L initializer_list BRACE_R                            { printf("initializer -> BRACE_L initializer_list BRACE_R\r\n"); }
@@ -327,7 +325,7 @@ direct_abstract_declarator  :   PARENTHESE_L abstract_declarator PARENTHESE_R   
                             |   direct_abstract_declarator BRACE_L BRACE_R                  { printf("direct_abstract_declarator -> direct_abstract_declarator BRACE_L BRACE_R\r\n"); }
                             |   BRACE_L BRACE_R                                             { printf("direct_abstract_declarator -> BRACE_L BRACE_R\r\n"); }
                             ;
-typedef_name                :   IDENTITY                                                    { printf("typedef_name -> IDENTITY(%s)\r\n", $1); }
+typedef_name                :   IDENTITY                                                    { printf("typedef_name -> IDENTITY\r\n"); }
                             ;
 stat                        :   labeled_stat                                                { printf("stat -> labeled_stat\r\n"); }
                             |   exp_stat                                                    { printf("stat -> exp_stat\r\n"); }
@@ -336,7 +334,7 @@ stat                        :   labeled_stat                                    
                             |   iteration_stat                                              { printf("stat -> iteration_stat\r\n"); }
                             |   jump_stat                                                   { printf("stat -> jump_stat\r\n"); }
                             ;
-labeled_stat                :   IDENTITY COLON stat                                         { printf("labeled_stat -> IDENTITY(%s) COLON stat\r\n", $1); }
+labeled_stat                :   IDENTITY COLON stat                                         { printf("labeled_stat -> IDENTITY COLON stat\r\n"); }
                             |   CASE const_exp COLON stat                                   { printf("labeled_stat -> CASE const_exp COLON stat\r\n"); }
                             |   DEFAULT COLON stat                                          { printf("labeled_stat -> DEFAULT COLON stat\r\n"); }
                             ;
@@ -366,7 +364,7 @@ iteration_stat              :   WHILE PARENTHESE_L exp PARENTHESE_R stat        
                             |   FOR PARENTHESE_L SEMI SEMI exp PARENTHESE_R stat            { printf("iteration_stat -> FOR PARENTHESE_L SEMI SEMI exp PARENTHESE_R stat\r\n"); }
                             |   FOR PARENTHESE_L SEMI SEMI PARENTHESE_R stat                { printf("iteration_stat -> FOR PARENTHESE_L SEMI SEMI PARENTHESE_R stat\r\n"); }
                             ;
-jump_stat                   :   GOTO IDENTITY SEMI                                          { printf("jump_stat -> GOTO IDENTITY(%s) SEMI\r\n", $2); }
+jump_stat                   :   GOTO IDENTITY SEMI                                          { printf("jump_stat -> GOTO IDENTITY SEMI\r\n"); }
                             |   CONTINUE SEMI                                               { printf("jump_stat -> CONTINUE SEMI\r\n"); }
                             |   BREAK SEMI                                                  { printf("jump_stat -> BREAK SEMI\r\n"); }
                             |   RETURN exp SEMI                                             { printf("jump_stat -> RETURN exp SEMI\r\n"); }
@@ -385,7 +383,6 @@ conditional_exp             :   logical_or_exp                                  
                             |   logical_or_exp QUES exp COLON                               { printf("conditional_exp -> logical_or_exp QUES exp COLON\r\n"); }
                             ;
 const_exp                   :   conditional_exp                                             { printf("const_exp -> conditional_exp\r\n"); }
-                            |   primary_exp                                                 { printf("const_exp -> primary_exp\r\n"); }
                             ;
 logical_or_exp              :   logical_and_exp                                             { printf("logical_or_exp -> logical_and_exp\r\n"); }
                             |   logical_or_exp OR logical_and_exp                           { printf("logical_or_exp -> logical_or_exp OR logical_and_exp\r\n"); }
@@ -446,12 +443,12 @@ postfix_exp                 :   primary_exp                                     
                             |   postfix_exp BRACKET_L exp BRACKET_R                         { printf("postfix_exp -> postfix_exp BRACKET_L exp BRACKET_R\r\n"); }
                             |   postfix_exp PARENTHESE_L argument_exp_list PARENTHESE_R     { printf("postfix_exp -> postfix_exp PARENTHESE_L argument_exp_list PARENTHESE_R\r\n"); }
                             |   postfix_exp PARENTHESE_L PARENTHESE_R                       { printf("postfix_exp -> postfix_exp PARENTHESE_L PARENTHESE_R\r\n"); }
-                            |   postfix_exp DOT IDENTITY                                    { printf("postfix_exp -> postfix_exp DOT IDENTITY(%s)\r\n", $3); }
-                            |   postfix_exp PELEMENT IDENTITY                               { printf("postfix_exp -> postfix_exp PELEMENT IDENTITY(%s)\r\n", $3); }
+                            |   postfix_exp DOT IDENTITY                                    { printf("postfix_exp -> postfix_exp DOT IDENTITY\r\n"); }
+                            |   postfix_exp PELEMENT IDENTITY                               { printf("postfix_exp -> postfix_exp PELEMENT IDENTITY\r\n"); }
                             |   postfix_exp POST_ADD                                        { printf("postfix_exp -> postfix_exp POST_ADD\r\n"); }
                             |   postfix_exp POST_SUB                                        { printf("postfix_exp -> postfix_exp POST_SUB\r\n"); }
                             ;
-primary_exp                 :   IDENTITY                                                    { printf("primary_exp -> IDENTITY(%s)\r\n", $1); }
+primary_exp                 :   IDENTITY                                                    { printf("primary_exp -> IDENTITY\r\n"); }
                             |   const_type                                                  { printf("primary_exp -> const_type\r\n"); }
                             |   STRING                                                      { printf("primary_exp -> STRING\r\n"); }
                             |   PARENTHESE_L exp PARENTHESE_R                               { printf("primary_exp -> PARENTHESE_L exp PARENTHESE_R\r\n"); }
@@ -459,9 +456,8 @@ primary_exp                 :   IDENTITY                                        
 argument_exp_list           :   assignment_exp                                              { printf("argument_exp_list -> assignment_exp\r\n"); }
                             |   argument_exp_list COMMA assignment_exp                      { printf("argument_exp_list -> argument_exp_list COMMA assignment_exp\r\n"); }
                             ;
-const_type                  :   INT_NUM                                                     { printf("const_type -> INT_NUM(%s)\r\n", $1); }
-                            |   FLOAT_NUM                                                   { printf("const_type -> FLOAT_NUM(%s)\r\n", $1); }
-                            |   STRING                                                      { printf("const_type -> STRING(%s)\r\n", $1); }
+const_type                  :   NUMBER                                                      { printf("const_type -> NUMBER\r\n"); }
+                            |   STRING                                                      { printf("const_type -> STRING\r\n"); }
                             ;
 %%
 int main(int argc, const char *args[])

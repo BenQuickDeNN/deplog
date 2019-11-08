@@ -29,10 +29,10 @@ else            { return ELSE; }
 enum            { return ENUM; }
 extern          { return EXTERN; }
 float           { return FLOAT; }
-for             { return FOR; }
+for             { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return FOR; }
 goto            { return GOTO; }
 if              { return IF; }
-int             { return INT; }
+int             { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return INT; }
 long            { return LONG; }
 register        { return REGISTER; }
 return          { return RETURN; }
@@ -66,8 +66,8 @@ _Generic        { return _GENERIC; }
     /* variable */
 [a-zA-Z][a-zA-Z0-9_]*   { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return IDENTITY; }
     /* number */
--?[0-9]+                { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return NUMBER; }
--?[0-9]+\.[0-9]+        { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return NUMBER; }
+-?[0-9]+\.[0-9]+        { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return FLOAT_NUM; }
+-?[0-9]+                { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return INT_NUM; }
     /* C-type strings */
 \"(\\.|\"\"|[^"\n"])*\" { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return STRING; }
     /* errors */
@@ -117,7 +117,7 @@ _Generic        { return _GENERIC; }
 "/*"                    { printf("lexer: yytext = %s\n", yytext); old_status = YY_START; BEGIN COMMENT; }
 <COMMENT>"*/"           { printf("lexer: yytext = %s\n", yytext); BEGIN old_status; }
 	/* special symbols */
-[ \t\r\n]               { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return FORMAT_SYMBOL; }
+[ \t\r\n]               //{ yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return FORMAT_SYMBOL; }
 	/* prevent flex jam */
 .                       { printf("lexer: yytext = %s\n", yytext); yyerror("lexing error\n"); }
 %%
