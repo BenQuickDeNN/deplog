@@ -103,10 +103,12 @@ int yylex();
 %token NOT_EQUAL
 %token LEQUAL
 %token GEQUAL
-%token ASSIGN_OP
 %token ASSIGN
 %token QUES
     /* dynamic token */
+%token <strval> ASSIGN_OP
+%token <strval> ASSIGN_SHIFTL
+%token <strval> ASSIGN_SHIFTR
 %token <strval> IDENTITY
 %token <strval> INT_NUM
 %token <strval> FLOAT_NUM
@@ -379,7 +381,9 @@ assignment_exp              :   conditional_exp                                 
                             |   unary_exp assignment_operator assignment_exp                { printf("assignment_exp -> unary_exp assignment_operator assignment_exp\r\n"); }
                             ;
 assignment_operator         :   ASSIGN                                                      { printf("assignment_operator -> ASSIGN\r\n"); }
-                            |   ASSIGN_OP                                                   { printf("assignment_operator -> ASSIGN_OP\r\n"); }
+                            |   ASSIGN_OP                                                   { printf("assignment_operator -> ASSIGN_OP(%s)\r\n", $1); }
+                            |   ASSIGN_SHIFTL                                               { printf("assignment_operator -> ASSIGN_SHIFTL\r\n"); }
+                            |   ASSIGN_SHIFTR                                               { printf("assignment_operator -> ASSIGN_SHIFTR\r\n"); }
                             ;
 conditional_exp             :   logical_or_exp                                              { printf("conditional_exp -> logical_or_exp\r\n"); }
                             |   logical_or_exp QUES exp COLON                               { printf("conditional_exp -> logical_or_exp QUES exp COLON\r\n"); }

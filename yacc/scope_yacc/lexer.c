@@ -1257,12 +1257,12 @@ YY_RULE_SETUP
 case 51:
 YY_RULE_SETUP
 #line 77 "lexer.l"
-{ yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN_OP; }
+{ yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN_SHIFTL; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
 #line 78 "lexer.l"
-{ yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN_OP; }
+{ yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN_SHIFTR; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP

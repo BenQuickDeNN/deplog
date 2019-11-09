@@ -74,8 +74,8 @@ _Generic        { return _GENERIC; }
 \"(\\.|[^"\n])*$        { yyerror("Unterminated string %s", yytext); }
     /* operators */
 [-+&~|^/%*]=            { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN_OP; }
-"<<="                   { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN_OP; }
-">>="                   { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN_OP; }
+"<<="                   { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN_SHIFTL; }
+">>="                   { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return ASSIGN_SHIFTR; }
 "=="                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return EQUAL; }
 "<="                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return LEQUAL; }
 ">="                    { yylval.strval = strdup(yytext); printf("lexer: yytext = %s\n", yytext); return GEQUAL; }

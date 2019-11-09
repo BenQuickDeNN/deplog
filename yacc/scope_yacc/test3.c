@@ -1,9 +1,4 @@
-int main()
+for (i = 0; i < 10; i++)
 {
-    int a;
-    while (1)
-    {
-        a++;
-    }
-    return 0;
+    A[i] = A[i + 1];
 }

@@ -16,7 +16,7 @@ Terminals unused in grammar
 
 Rules useless in parser due to conflicts
 
-  216 const_type: STRING
+  218 const_type: STRING
 
 
 State 22 conflicts: 31 reduce/reduce
@@ -33,10 +33,10 @@ State 66 conflicts: 1 shift/reduce
 State 79 conflicts: 15 shift/reduce
 State 80 conflicts: 15 shift/reduce
 State 113 conflicts: 2 reduce/reduce
-State 133 conflicts: 33 reduce/reduce
+State 133 conflicts: 35 reduce/reduce
 State 150 conflicts: 5 reduce/reduce
 State 206 conflicts: 4 reduce/reduce
-State 343 conflicts: 1 shift/reduce
+State 345 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -241,88 +241,90 @@ Grammar
 
   152 assignment_operator: ASSIGN
   153                    | ASSIGN_OP
+  154                    | ASSIGN_SHIFTL
+  155                    | ASSIGN_SHIFTR
 
-  154 conditional_exp: logical_or_exp
-  155                | logical_or_exp QUES exp COLON
+  156 conditional_exp: logical_or_exp
+  157                | logical_or_exp QUES exp COLON
 
-  156 const_exp: conditional_exp
-  157          | primary_exp
+  158 const_exp: conditional_exp
+  159          | primary_exp
 
-  158 logical_or_exp: logical_and_exp
-  159               | logical_or_exp OR logical_and_exp
+  160 logical_or_exp: logical_and_exp
+  161               | logical_or_exp OR logical_and_exp
 
-  160 logical_and_exp: inclusive_or_exp
-  161                | logical_and_exp AND inclusive_or_exp
+  162 logical_and_exp: inclusive_or_exp
+  163                | logical_and_exp AND inclusive_or_exp
 
-  162 inclusive_or_exp: exclusive_or_exp
-  163                 | inclusive_or_exp OR_OP exclusive_or_exp
+  164 inclusive_or_exp: exclusive_or_exp
+  165                 | inclusive_or_exp OR_OP exclusive_or_exp
 
-  164 exclusive_or_exp: and_exp
-  165                 | exclusive_or_exp XOR_OP and_exp
+  166 exclusive_or_exp: and_exp
+  167                 | exclusive_or_exp XOR_OP and_exp
 
-  166 and_exp: equality_exp
-  167        | and_exp AND_OP equality_exp
+  168 and_exp: equality_exp
+  169        | and_exp AND_OP equality_exp
 
-  168 equality_exp: relational_exp
-  169             | equality_exp EQUAL relational_exp
-  170             | equality_exp NOT_EQUAL relational_exp
+  170 equality_exp: relational_exp
+  171             | equality_exp EQUAL relational_exp
+  172             | equality_exp NOT_EQUAL relational_exp
 
-  171 relational_exp: shift_expression
-  172               | relational_exp LESSER shift_expression
-  173               | relational_exp GREATER shift_expression
-  174               | relational_exp LEQUAL shift_expression
-  175               | relational_exp GEQUAL shift_expression
+  173 relational_exp: shift_expression
+  174               | relational_exp LESSER shift_expression
+  175               | relational_exp GREATER shift_expression
+  176               | relational_exp LEQUAL shift_expression
+  177               | relational_exp GEQUAL shift_expression
 
-  176 shift_expression: additive_exp
-  177                 | shift_expression MOVE_L additive_exp
-  178                 | shift_expression MOVE_R additive_exp
+  178 shift_expression: additive_exp
+  179                 | shift_expression MOVE_L additive_exp
+  180                 | shift_expression MOVE_R additive_exp
 
-  179 additive_exp: mult_exp
-  180             | additive_exp ADD mult_exp
-  181             | additive_exp SUB mult_exp
+  181 additive_exp: mult_exp
+  182             | additive_exp ADD mult_exp
+  183             | additive_exp SUB mult_exp
 
-  182 mult_exp: cast_exp
-  183         | mult_exp MUL cast_exp
-  184         | mult_exp DIV cast_exp
-  185         | mult_exp MOD cast_exp
+  184 mult_exp: cast_exp
+  185         | mult_exp MUL cast_exp
+  186         | mult_exp DIV cast_exp
+  187         | mult_exp MOD cast_exp
 
-  186 cast_exp: unary_exp
-  187         | PARENTHESE_L type_name PARENTHESE_R cast_exp
+  188 cast_exp: unary_exp
+  189         | PARENTHESE_L type_name PARENTHESE_R cast_exp
 
-  188 unary_exp: postfix_exp
-  189          | POST_ADD unary_exp
-  190          | POST_SUB unary_exp
-  191          | unary_operator cast_exp
-  192          | SIZEOF unary_exp
-  193          | SIZEOF PARENTHESE_L type_name PARENTHESE_R
+  190 unary_exp: postfix_exp
+  191          | POST_ADD unary_exp
+  192          | POST_SUB unary_exp
+  193          | unary_operator cast_exp
+  194          | SIZEOF unary_exp
+  195          | SIZEOF PARENTHESE_L type_name PARENTHESE_R
 
-  194 unary_operator: AND_OP
-  195               | MUL
-  196               | ADD
-  197               | SUB
-  198               | NEG
-  199               | NOT
+  196 unary_operator: AND_OP
+  197               | MUL
+  198               | ADD
+  199               | SUB
+  200               | NEG
+  201               | NOT
 
-  200 postfix_exp: primary_exp
-  201            | postfix_exp BRACKET_L exp BRACKET_R
-  202            | postfix_exp PARENTHESE_L argument_exp_list PARENTHESE_R
-  203            | postfix_exp PARENTHESE_L PARENTHESE_R
-  204            | postfix_exp DOT IDENTITY
-  205            | postfix_exp PELEMENT IDENTITY
-  206            | postfix_exp POST_ADD
-  207            | postfix_exp POST_SUB
+  202 postfix_exp: primary_exp
+  203            | postfix_exp BRACKET_L exp BRACKET_R
+  204            | postfix_exp PARENTHESE_L argument_exp_list PARENTHESE_R
+  205            | postfix_exp PARENTHESE_L PARENTHESE_R
+  206            | postfix_exp DOT IDENTITY
+  207            | postfix_exp PELEMENT IDENTITY
+  208            | postfix_exp POST_ADD
+  209            | postfix_exp POST_SUB
 
-  208 primary_exp: IDENTITY
-  209            | const_type
-  210            | STRING
-  211            | PARENTHESE_L exp PARENTHESE_R
+  210 primary_exp: IDENTITY
+  211            | const_type
+  212            | STRING
+  213            | PARENTHESE_L exp PARENTHESE_R
 
-  212 argument_exp_list: assignment_exp
-  213                  | argument_exp_list COMMA assignment_exp
+  214 argument_exp_list: assignment_exp
+  215                  | argument_exp_list COMMA assignment_exp
 
-  214 const_type: INT_NUM
-  215           | FLOAT_NUM
-  216           | STRING
+  216 const_type: INT_NUM
+  217           | FLOAT_NUM
+  218           | STRING
 
 
 Terminals, with rules where they appear
@@ -333,7 +335,7 @@ AUTO (258) 21
 BREAK (259) 145
 CASE (260) 120
 CHAR (261) 27
-COLON (262) 59 60 119 120 121 122 155
+COLON (262) 59 60 119 120 121 122 157
 CONST (263) 38
 CONTINUE (264) 144
 DEFAULT (265) 121
@@ -353,7 +355,7 @@ REGISTER (278) 22
 RETURN (279) 146 147
 SHORT (280) 28
 SIGNED (281) 33
-SIZEOF (282) 192 193
+SIZEOF (282) 194 195
 STATIC (283) 23
 STRUCT (284) 43
 SWITCH (285) 132
@@ -375,191 +377,193 @@ _STATIC_ASSERT (300)
 _NORETURN (301)
 _THREAD_LOCAL (302)
 _GENERIC (303)
-ADD (304) 180 196
-SUB (305) 181 197
-MUL (306) 78 79 80 81 183 195
-DIV (307) 184
-MOD (308) 185
-NEG (309) 198
-COMMA (310) 48 57 65 85 87 92 95 97 149 213
-DOT (311) 204
+ADD (304) 182 198
+SUB (305) 183 199
+MUL (306) 78 79 80 81 185 197
+DIV (307) 186
+MOD (308) 187
+NEG (309) 200
+COMMA (310) 48 57 65 85 87 92 95 97 149 215
+DOT (311) 206
 SEMI (312) 10 11 51 122 123 134 135 136 137 138 139 140 141 142 143
     144 145 146 147
 PARENTHESE_L (313) 72 75 76 77 103 130 131 132 133 134 135 136 137
-    138 139 140 141 142 187 193 202 203 211
+    138 139 140 141 142 189 195 204 205 213
 PARENTHESE_R (314) 72 75 76 77 103 130 131 132 133 134 135 136 137
-    138 139 140 141 142 187 193 202 203 211
-PELEMENT (315) 205
-POST_ADD (316) 189 206
-POST_SUB (317) 190 207
-BRACKET_L (318) 73 74 104 105 106 107 201
-BRACKET_R (319) 73 74 104 105 106 107 201
+    138 139 140 141 142 189 195 204 205 213
+PELEMENT (315) 207
+POST_ADD (316) 191 208
+POST_SUB (317) 192 209
+BRACKET_L (318) 73 74 104 105 106 107 203
+BRACKET_R (319) 73 74 104 105 106 107 203
 BRACE_L (320) 40 41 61 62 94 95 108 109 110 111 124 125 126 127
 BRACE_R (321) 40 41 61 62 94 95 108 109 110 111 124 125 126 127
-AND (322) 161
-AND_OP (323) 167 194
-OR (324) 159
-OR_OP (325) 163
-XOR_OP (326) 165
-NOT (327) 199
-EQUAL (328) 169
-MOVE_L (329) 177
-MOVE_R (330) 178
-LESSER (331) 172
-GREATER (332) 173
-NOT_EQUAL (333) 170
-LEQUAL (334) 174
-GEQUAL (335) 175
-ASSIGN_OP (336) 153
-ASSIGN (337) 50 67 152
-QUES (338) 155
-IDENTITY (339) 40 42 61 63 66 67 71 91 92 112 119 143 204 205 208
-INT_NUM (340) 214
-FLOAT_NUM (341) 215
-STRING (342) 210 216
+AND (322) 163
+AND_OP (323) 169 196
+OR (324) 161
+OR_OP (325) 165
+XOR_OP (326) 167
+NOT (327) 201
+EQUAL (328) 171
+MOVE_L (329) 179
+MOVE_R (330) 180
+LESSER (331) 174
+GREATER (332) 175
+NOT_EQUAL (333) 172
+LEQUAL (334) 176
+GEQUAL (335) 177
+ASSIGN (336) 50 67 152
+QUES (337) 157
+ASSIGN_OP (338) 153
+ASSIGN_SHIFTL (339) 154
+ASSIGN_SHIFTR (340) 155
+IDENTITY (341) 40 42 61 63 66 67 71 91 92 112 119 143 206 207 210
+INT_NUM (342) 216
+FLOAT_NUM (343) 217
+STRING (344) 212 218
 
 
 Nonterminals, with rules where they appear
 
-$accept (88)
+$accept (90)
     on left: 0
-translation_unit (89)
+translation_unit (91)
     on left: 1 2, on right: 0 2
-external_decl (90)
+external_decl (92)
     on left: 3 4, on right: 1 2
-function_definition (91)
+function_definition (93)
     on left: 5 6 7 8 9, on right: 3
-decl (92)
+decl (94)
     on left: 10 11, on right: 4 12 13
-decl_list (93)
+decl_list (95)
     on left: 12 13, on right: 5 6 13 124 126
-decl_specs (94)
+decl_specs (96)
     on left: 14 15 16 17 18 19 20, on right: 5 7 8 10 11 14 16 19 70
     88 89 90
-storage_class_spec (95)
+storage_class_spec (97)
     on left: 21 22 23 24 25, on right: 14 15
-type_spec (96)
+type_spec (98)
     on left: 26 27 28 29 30 31 32 33 34 35 36 37, on right: 16 17 18
     52 53
-type_qualifier (97)
+type_qualifier (99)
     on left: 38 39, on right: 19 20 54 55 82 83
-struct_or_union_spec (98)
+struct_or_union_spec (100)
     on left: 40 41 42, on right: 35
-struct_or_union (99)
+struct_or_union (101)
     on left: 43 44, on right: 40 41 42
-struct_decl_list (100)
+struct_decl_list (102)
     on left: 45 46, on right: 40 41 46
-init_declarator_list (101)
+init_declarator_list (103)
     on left: 47 48, on right: 10 48
-init_declarator (102)
+init_declarator (104)
     on left: 49 50, on right: 47 48
-struct_decl (103)
+struct_decl (105)
     on left: 51, on right: 45 46
-spec_qualifier_list (104)
+spec_qualifier_list (106)
     on left: 52 53 54 55, on right: 51 52 54 98 99
-struct_declarator_list (105)
+struct_declarator_list (107)
     on left: 56 57, on right: 51 57
-struct_declarator (106)
+struct_declarator (108)
     on left: 58 59 60, on right: 56 57
-enum_spec (107)
+enum_spec (109)
     on left: 61 62 63, on right: 36
-enumerator_list (108)
+enumerator_list (110)
     on left: 64 65, on right: 61 62 65
-enumerator (109)
+enumerator (111)
     on left: 66 67, on right: 64 65
-declarator (110)
+declarator (112)
     on left: 68 69 70, on right: 5 6 7 8 9 49 50 58 59 72 88
-direct_declarator (111)
+direct_declarator (113)
     on left: 71 72 73 74 75 76 77, on right: 17 68 69 73 74 75 76 77
-pointer (112)
+pointer (114)
     on left: 78 79 80 81, on right: 68 80 81 100 101
-type_qualifier_list (113)
+type_qualifier_list (115)
     on left: 82 83, on right: 78 80 83
-param_type_list (114)
+param_type_list (116)
     on left: 84 85, on right: 75 108 109
-param_list (115)
+param_list (117)
     on left: 86 87, on right: 84 85 87
-param_decl (116)
+param_decl (118)
     on left: 88 89 90, on right: 86 87
-id_list (117)
+id_list (119)
     on left: 91 92, on right: 76 92
-initializer (118)
+initializer (120)
     on left: 93 94 95, on right: 50 96 97
-initializer_list (119)
+initializer_list (121)
     on left: 96 97, on right: 94 95 97
-type_name (120)
-    on left: 98 99, on right: 187 193
-abstract_declarator (121)
+type_name (122)
+    on left: 98 99, on right: 189 195
+abstract_declarator (123)
     on left: 100 101 102, on right: 89 98 103
-direct_abstract_declarator (122)
+direct_abstract_declarator (124)
     on left: 103 104 105 106 107 108 109 110 111, on right: 101 102
     104 106 108 110
-typedef_name (123)
+typedef_name (125)
     on left: 112, on right: 37
-stat (124)
+stat (126)
     on left: 113 114 115 116 117 118, on right: 119 120 121 128 129
     130 131 132 133 134 135 136 137 138 139 140 141 142
-labeled_stat (125)
+labeled_stat (127)
     on left: 119 120 121, on right: 113
-exp_stat (126)
+exp_stat (128)
     on left: 122 123, on right: 114
-compound_stat (127)
+compound_stat (129)
     on left: 124 125 126 127, on right: 5 6 7 9 115
-stat_list (128)
+stat_list (130)
     on left: 128 129, on right: 124 125 129
-selection_stat (129)
+selection_stat (131)
     on left: 130 131 132, on right: 116
-iteration_stat (130)
+iteration_stat (132)
     on left: 133 134 135 136 137 138 139 140 141 142, on right: 117
-jump_stat (131)
+jump_stat (133)
     on left: 143 144 145 146 147, on right: 118
-exp (132)
+exp (134)
     on left: 148 149, on right: 130 131 132 133 134 135 136 137 138
-    139 140 141 146 149 155 201 211
-assignment_exp (133)
-    on left: 150 151, on right: 93 148 149 151 212 213
-assignment_operator (134)
-    on left: 152 153, on right: 151
-conditional_exp (135)
-    on left: 154 155, on right: 150 156
-const_exp (136)
-    on left: 156 157, on right: 59 60 67 73 104 105 120
-logical_or_exp (137)
-    on left: 158 159, on right: 154 155 159
-logical_and_exp (138)
-    on left: 160 161, on right: 158 159 161
-inclusive_or_exp (139)
+    139 140 141 146 149 157 203 213
+assignment_exp (135)
+    on left: 150 151, on right: 93 148 149 151 214 215
+assignment_operator (136)
+    on left: 152 153 154 155, on right: 151
+conditional_exp (137)
+    on left: 156 157, on right: 150 158
+const_exp (138)
+    on left: 158 159, on right: 59 60 67 73 104 105 120
+logical_or_exp (139)
+    on left: 160 161, on right: 156 157 161
+logical_and_exp (140)
     on left: 162 163, on right: 160 161 163
-exclusive_or_exp (140)
+inclusive_or_exp (141)
     on left: 164 165, on right: 162 163 165
-and_exp (141)
+exclusive_or_exp (142)
     on left: 166 167, on right: 164 165 167
-equality_exp (142)
-    on left: 168 169 170, on right: 166 167 169 170
-relational_exp (143)
-    on left: 171 172 173 174 175, on right: 168 169 170 172 173 174
-    175
-shift_expression (144)
-    on left: 176 177 178, on right: 171 172 173 174 175 177 178
-additive_exp (145)
-    on left: 179 180 181, on right: 176 177 178 180 181
-mult_exp (146)
-    on left: 182 183 184 185, on right: 179 180 181 183 184 185
-cast_exp (147)
-    on left: 186 187, on right: 182 183 184 185 187 191
-unary_exp (148)
-    on left: 188 189 190 191 192 193, on right: 151 186 189 190 192
-unary_operator (149)
-    on left: 194 195 196 197 198 199, on right: 191
-postfix_exp (150)
-    on left: 200 201 202 203 204 205 206 207, on right: 188 201 202
-    203 204 205 206 207
-primary_exp (151)
-    on left: 208 209 210 211, on right: 157 200
-argument_exp_list (152)
-    on left: 212 213, on right: 202 213
-const_type (153)
-    on left: 214 215 216, on right: 209
+and_exp (143)
+    on left: 168 169, on right: 166 167 169
+equality_exp (144)
+    on left: 170 171 172, on right: 168 169 171 172
+relational_exp (145)
+    on left: 173 174 175 176 177, on right: 170 171 172 174 175 176
+    177
+shift_expression (146)
+    on left: 178 179 180, on right: 173 174 175 176 177 179 180
+additive_exp (147)
+    on left: 181 182 183, on right: 178 179 180 182 183
+mult_exp (148)
+    on left: 184 185 186 187, on right: 181 182 183 185 186 187
+cast_exp (149)
+    on left: 188 189, on right: 184 185 186 187 189 193
+unary_exp (150)
+    on left: 190 191 192 193 194 195, on right: 151 188 191 192 194
+unary_operator (151)
+    on left: 196 197 198 199 200 201, on right: 193
+postfix_exp (152)
+    on left: 202 203 204 205 206 207 208 209, on right: 190 203 204
+    205 206 207 208 209
+primary_exp (153)
+    on left: 210 211 212 213, on right: 159 202
+argument_exp_list (154)
+    on left: 214 215, on right: 204 215
+const_type (155)
+    on left: 216 217 218, on right: 211
 
 
 State 0
@@ -2676,8 +2680,8 @@ State 118
 
 State 119
 
-  192 unary_exp: SIZEOF . unary_exp
-  193          | SIZEOF . PARENTHESE_L type_name PARENTHESE_R
+  194 unary_exp: SIZEOF . unary_exp
+  195          | SIZEOF . PARENTHESE_L type_name PARENTHESE_R
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -2703,36 +2707,36 @@ State 119
 
 State 120
 
-  196 unary_operator: ADD .
-
-    $default  reduce using rule 196 (unary_operator)
-
-
-State 121
-
-  197 unary_operator: SUB .
-
-    $default  reduce using rule 197 (unary_operator)
-
-
-State 122
-
-  195 unary_operator: MUL .
-
-    $default  reduce using rule 195 (unary_operator)
-
-
-State 123
-
-  198 unary_operator: NEG .
+  198 unary_operator: ADD .
 
     $default  reduce using rule 198 (unary_operator)
 
 
+State 121
+
+  199 unary_operator: SUB .
+
+    $default  reduce using rule 199 (unary_operator)
+
+
+State 122
+
+  197 unary_operator: MUL .
+
+    $default  reduce using rule 197 (unary_operator)
+
+
+State 123
+
+  200 unary_operator: NEG .
+
+    $default  reduce using rule 200 (unary_operator)
+
+
 State 124
 
-  187 cast_exp: PARENTHESE_L . type_name PARENTHESE_R cast_exp
-  211 primary_exp: PARENTHESE_L . exp PARENTHESE_R
+  189 cast_exp: PARENTHESE_L . type_name PARENTHESE_R cast_exp
+  213 primary_exp: PARENTHESE_L . exp PARENTHESE_R
 
     CHAR          shift, and go to state 2
     CONST         shift, and go to state 3
@@ -2794,7 +2798,7 @@ State 124
 
 State 125
 
-  189 unary_exp: POST_ADD . unary_exp
+  191 unary_exp: POST_ADD . unary_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -2820,7 +2824,7 @@ State 125
 
 State 126
 
-  190 unary_exp: POST_SUB . unary_exp
+  192 unary_exp: POST_SUB . unary_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -2853,118 +2857,122 @@ State 127
 
 State 128
 
-  194 unary_operator: AND_OP .
+  196 unary_operator: AND_OP .
 
-    $default  reduce using rule 194 (unary_operator)
+    $default  reduce using rule 196 (unary_operator)
 
 
 State 129
 
-  199 unary_operator: NOT .
+  201 unary_operator: NOT .
 
-    $default  reduce using rule 199 (unary_operator)
+    $default  reduce using rule 201 (unary_operator)
 
 
 State 130
 
-  208 primary_exp: IDENTITY .
+  210 primary_exp: IDENTITY .
 
-    $default  reduce using rule 208 (primary_exp)
+    $default  reduce using rule 210 (primary_exp)
 
 
 State 131
 
-  214 const_type: INT_NUM .
+  216 const_type: INT_NUM .
 
-    $default  reduce using rule 214 (const_type)
+    $default  reduce using rule 216 (const_type)
 
 
 State 132
 
-  215 const_type: FLOAT_NUM .
+  217 const_type: FLOAT_NUM .
 
-    $default  reduce using rule 215 (const_type)
+    $default  reduce using rule 217 (const_type)
 
 
 State 133
 
-  210 primary_exp: STRING .
-  216 const_type: STRING .
+  212 primary_exp: STRING .
+  218 const_type: STRING .
 
-    COLON         reduce using rule 210 (primary_exp)
-    COLON         [reduce using rule 216 (const_type)]
-    ADD           reduce using rule 210 (primary_exp)
-    ADD           [reduce using rule 216 (const_type)]
-    SUB           reduce using rule 210 (primary_exp)
-    SUB           [reduce using rule 216 (const_type)]
-    MUL           reduce using rule 210 (primary_exp)
-    MUL           [reduce using rule 216 (const_type)]
-    DIV           reduce using rule 210 (primary_exp)
-    DIV           [reduce using rule 216 (const_type)]
-    MOD           reduce using rule 210 (primary_exp)
-    MOD           [reduce using rule 216 (const_type)]
-    COMMA         reduce using rule 210 (primary_exp)
-    COMMA         [reduce using rule 216 (const_type)]
-    DOT           reduce using rule 210 (primary_exp)
-    DOT           [reduce using rule 216 (const_type)]
-    SEMI          reduce using rule 210 (primary_exp)
-    SEMI          [reduce using rule 216 (const_type)]
-    PARENTHESE_L  reduce using rule 210 (primary_exp)
-    PARENTHESE_L  [reduce using rule 216 (const_type)]
-    PARENTHESE_R  reduce using rule 210 (primary_exp)
-    PARENTHESE_R  [reduce using rule 216 (const_type)]
-    PELEMENT      reduce using rule 210 (primary_exp)
-    PELEMENT      [reduce using rule 216 (const_type)]
-    POST_ADD      reduce using rule 210 (primary_exp)
-    POST_ADD      [reduce using rule 216 (const_type)]
-    POST_SUB      reduce using rule 210 (primary_exp)
-    POST_SUB      [reduce using rule 216 (const_type)]
-    BRACKET_L     reduce using rule 210 (primary_exp)
-    BRACKET_L     [reduce using rule 216 (const_type)]
-    BRACKET_R     reduce using rule 210 (primary_exp)
-    BRACKET_R     [reduce using rule 216 (const_type)]
-    BRACE_R       reduce using rule 210 (primary_exp)
-    BRACE_R       [reduce using rule 216 (const_type)]
-    AND           reduce using rule 210 (primary_exp)
-    AND           [reduce using rule 216 (const_type)]
-    AND_OP        reduce using rule 210 (primary_exp)
-    AND_OP        [reduce using rule 216 (const_type)]
-    OR            reduce using rule 210 (primary_exp)
-    OR            [reduce using rule 216 (const_type)]
-    OR_OP         reduce using rule 210 (primary_exp)
-    OR_OP         [reduce using rule 216 (const_type)]
-    XOR_OP        reduce using rule 210 (primary_exp)
-    XOR_OP        [reduce using rule 216 (const_type)]
-    EQUAL         reduce using rule 210 (primary_exp)
-    EQUAL         [reduce using rule 216 (const_type)]
-    MOVE_L        reduce using rule 210 (primary_exp)
-    MOVE_L        [reduce using rule 216 (const_type)]
-    MOVE_R        reduce using rule 210 (primary_exp)
-    MOVE_R        [reduce using rule 216 (const_type)]
-    LESSER        reduce using rule 210 (primary_exp)
-    LESSER        [reduce using rule 216 (const_type)]
-    GREATER       reduce using rule 210 (primary_exp)
-    GREATER       [reduce using rule 216 (const_type)]
-    NOT_EQUAL     reduce using rule 210 (primary_exp)
-    NOT_EQUAL     [reduce using rule 216 (const_type)]
-    LEQUAL        reduce using rule 210 (primary_exp)
-    LEQUAL        [reduce using rule 216 (const_type)]
-    GEQUAL        reduce using rule 210 (primary_exp)
-    GEQUAL        [reduce using rule 216 (const_type)]
-    ASSIGN_OP     reduce using rule 210 (primary_exp)
-    ASSIGN_OP     [reduce using rule 216 (const_type)]
-    ASSIGN        reduce using rule 210 (primary_exp)
-    ASSIGN        [reduce using rule 216 (const_type)]
-    QUES          reduce using rule 210 (primary_exp)
-    QUES          [reduce using rule 216 (const_type)]
-    $default      reduce using rule 210 (primary_exp)
+    COLON          reduce using rule 212 (primary_exp)
+    COLON          [reduce using rule 218 (const_type)]
+    ADD            reduce using rule 212 (primary_exp)
+    ADD            [reduce using rule 218 (const_type)]
+    SUB            reduce using rule 212 (primary_exp)
+    SUB            [reduce using rule 218 (const_type)]
+    MUL            reduce using rule 212 (primary_exp)
+    MUL            [reduce using rule 218 (const_type)]
+    DIV            reduce using rule 212 (primary_exp)
+    DIV            [reduce using rule 218 (const_type)]
+    MOD            reduce using rule 212 (primary_exp)
+    MOD            [reduce using rule 218 (const_type)]
+    COMMA          reduce using rule 212 (primary_exp)
+    COMMA          [reduce using rule 218 (const_type)]
+    DOT            reduce using rule 212 (primary_exp)
+    DOT            [reduce using rule 218 (const_type)]
+    SEMI           reduce using rule 212 (primary_exp)
+    SEMI           [reduce using rule 218 (const_type)]
+    PARENTHESE_L   reduce using rule 212 (primary_exp)
+    PARENTHESE_L   [reduce using rule 218 (const_type)]
+    PARENTHESE_R   reduce using rule 212 (primary_exp)
+    PARENTHESE_R   [reduce using rule 218 (const_type)]
+    PELEMENT       reduce using rule 212 (primary_exp)
+    PELEMENT       [reduce using rule 218 (const_type)]
+    POST_ADD       reduce using rule 212 (primary_exp)
+    POST_ADD       [reduce using rule 218 (const_type)]
+    POST_SUB       reduce using rule 212 (primary_exp)
+    POST_SUB       [reduce using rule 218 (const_type)]
+    BRACKET_L      reduce using rule 212 (primary_exp)
+    BRACKET_L      [reduce using rule 218 (const_type)]
+    BRACKET_R      reduce using rule 212 (primary_exp)
+    BRACKET_R      [reduce using rule 218 (const_type)]
+    BRACE_R        reduce using rule 212 (primary_exp)
+    BRACE_R        [reduce using rule 218 (const_type)]
+    AND            reduce using rule 212 (primary_exp)
+    AND            [reduce using rule 218 (const_type)]
+    AND_OP         reduce using rule 212 (primary_exp)
+    AND_OP         [reduce using rule 218 (const_type)]
+    OR             reduce using rule 212 (primary_exp)
+    OR             [reduce using rule 218 (const_type)]
+    OR_OP          reduce using rule 212 (primary_exp)
+    OR_OP          [reduce using rule 218 (const_type)]
+    XOR_OP         reduce using rule 212 (primary_exp)
+    XOR_OP         [reduce using rule 218 (const_type)]
+    EQUAL          reduce using rule 212 (primary_exp)
+    EQUAL          [reduce using rule 218 (const_type)]
+    MOVE_L         reduce using rule 212 (primary_exp)
+    MOVE_L         [reduce using rule 218 (const_type)]
+    MOVE_R         reduce using rule 212 (primary_exp)
+    MOVE_R         [reduce using rule 218 (const_type)]
+    LESSER         reduce using rule 212 (primary_exp)
+    LESSER         [reduce using rule 218 (const_type)]
+    GREATER        reduce using rule 212 (primary_exp)
+    GREATER        [reduce using rule 218 (const_type)]
+    NOT_EQUAL      reduce using rule 212 (primary_exp)
+    NOT_EQUAL      [reduce using rule 218 (const_type)]
+    LEQUAL         reduce using rule 212 (primary_exp)
+    LEQUAL         [reduce using rule 218 (const_type)]
+    GEQUAL         reduce using rule 212 (primary_exp)
+    GEQUAL         [reduce using rule 218 (const_type)]
+    ASSIGN         reduce using rule 212 (primary_exp)
+    ASSIGN         [reduce using rule 218 (const_type)]
+    QUES           reduce using rule 212 (primary_exp)
+    QUES           [reduce using rule 218 (const_type)]
+    ASSIGN_OP      reduce using rule 212 (primary_exp)
+    ASSIGN_OP      [reduce using rule 218 (const_type)]
+    ASSIGN_SHIFTL  reduce using rule 212 (primary_exp)
+    ASSIGN_SHIFTL  [reduce using rule 218 (const_type)]
+    ASSIGN_SHIFTR  reduce using rule 212 (primary_exp)
+    ASSIGN_SHIFTR  [reduce using rule 218 (const_type)]
+    $default       reduce using rule 212 (primary_exp)
 
 
 State 134
 
-  156 const_exp: conditional_exp .
+  158 const_exp: conditional_exp .
 
-    $default  reduce using rule 156 (const_exp)
+    $default  reduce using rule 158 (const_exp)
 
 
 State 135
@@ -2976,139 +2984,139 @@ State 135
 
 State 136
 
-  154 conditional_exp: logical_or_exp .
-  155                | logical_or_exp . QUES exp COLON
-  159 logical_or_exp: logical_or_exp . OR logical_and_exp
+  156 conditional_exp: logical_or_exp .
+  157                | logical_or_exp . QUES exp COLON
+  161 logical_or_exp: logical_or_exp . OR logical_and_exp
 
     OR    shift, and go to state 214
     QUES  shift, and go to state 215
 
-    $default  reduce using rule 154 (conditional_exp)
+    $default  reduce using rule 156 (conditional_exp)
 
 
 State 137
 
-  158 logical_or_exp: logical_and_exp .
-  161 logical_and_exp: logical_and_exp . AND inclusive_or_exp
+  160 logical_or_exp: logical_and_exp .
+  163 logical_and_exp: logical_and_exp . AND inclusive_or_exp
 
     AND  shift, and go to state 216
 
-    $default  reduce using rule 158 (logical_or_exp)
+    $default  reduce using rule 160 (logical_or_exp)
 
 
 State 138
 
-  160 logical_and_exp: inclusive_or_exp .
-  163 inclusive_or_exp: inclusive_or_exp . OR_OP exclusive_or_exp
+  162 logical_and_exp: inclusive_or_exp .
+  165 inclusive_or_exp: inclusive_or_exp . OR_OP exclusive_or_exp
 
     OR_OP  shift, and go to state 217
 
-    $default  reduce using rule 160 (logical_and_exp)
+    $default  reduce using rule 162 (logical_and_exp)
 
 
 State 139
 
-  162 inclusive_or_exp: exclusive_or_exp .
-  165 exclusive_or_exp: exclusive_or_exp . XOR_OP and_exp
+  164 inclusive_or_exp: exclusive_or_exp .
+  167 exclusive_or_exp: exclusive_or_exp . XOR_OP and_exp
 
     XOR_OP  shift, and go to state 218
 
-    $default  reduce using rule 162 (inclusive_or_exp)
+    $default  reduce using rule 164 (inclusive_or_exp)
 
 
 State 140
 
-  164 exclusive_or_exp: and_exp .
-  167 and_exp: and_exp . AND_OP equality_exp
+  166 exclusive_or_exp: and_exp .
+  169 and_exp: and_exp . AND_OP equality_exp
 
     AND_OP  shift, and go to state 219
 
-    $default  reduce using rule 164 (exclusive_or_exp)
+    $default  reduce using rule 166 (exclusive_or_exp)
 
 
 State 141
 
-  166 and_exp: equality_exp .
-  169 equality_exp: equality_exp . EQUAL relational_exp
-  170             | equality_exp . NOT_EQUAL relational_exp
+  168 and_exp: equality_exp .
+  171 equality_exp: equality_exp . EQUAL relational_exp
+  172             | equality_exp . NOT_EQUAL relational_exp
 
     EQUAL      shift, and go to state 220
     NOT_EQUAL  shift, and go to state 221
 
-    $default  reduce using rule 166 (and_exp)
+    $default  reduce using rule 168 (and_exp)
 
 
 State 142
 
-  168 equality_exp: relational_exp .
-  172 relational_exp: relational_exp . LESSER shift_expression
-  173               | relational_exp . GREATER shift_expression
-  174               | relational_exp . LEQUAL shift_expression
-  175               | relational_exp . GEQUAL shift_expression
+  170 equality_exp: relational_exp .
+  174 relational_exp: relational_exp . LESSER shift_expression
+  175               | relational_exp . GREATER shift_expression
+  176               | relational_exp . LEQUAL shift_expression
+  177               | relational_exp . GEQUAL shift_expression
 
     LESSER   shift, and go to state 222
     GREATER  shift, and go to state 223
     LEQUAL   shift, and go to state 224
     GEQUAL   shift, and go to state 225
 
-    $default  reduce using rule 168 (equality_exp)
+    $default  reduce using rule 170 (equality_exp)
 
 
 State 143
 
-  171 relational_exp: shift_expression .
-  177 shift_expression: shift_expression . MOVE_L additive_exp
-  178                 | shift_expression . MOVE_R additive_exp
+  173 relational_exp: shift_expression .
+  179 shift_expression: shift_expression . MOVE_L additive_exp
+  180                 | shift_expression . MOVE_R additive_exp
 
     MOVE_L  shift, and go to state 226
     MOVE_R  shift, and go to state 227
 
-    $default  reduce using rule 171 (relational_exp)
+    $default  reduce using rule 173 (relational_exp)
 
 
 State 144
 
-  176 shift_expression: additive_exp .
-  180 additive_exp: additive_exp . ADD mult_exp
-  181             | additive_exp . SUB mult_exp
+  178 shift_expression: additive_exp .
+  182 additive_exp: additive_exp . ADD mult_exp
+  183             | additive_exp . SUB mult_exp
 
     ADD  shift, and go to state 228
     SUB  shift, and go to state 229
 
-    $default  reduce using rule 176 (shift_expression)
+    $default  reduce using rule 178 (shift_expression)
 
 
 State 145
 
-  179 additive_exp: mult_exp .
-  183 mult_exp: mult_exp . MUL cast_exp
-  184         | mult_exp . DIV cast_exp
-  185         | mult_exp . MOD cast_exp
+  181 additive_exp: mult_exp .
+  185 mult_exp: mult_exp . MUL cast_exp
+  186         | mult_exp . DIV cast_exp
+  187         | mult_exp . MOD cast_exp
 
     MUL  shift, and go to state 230
     DIV  shift, and go to state 231
     MOD  shift, and go to state 232
 
-    $default  reduce using rule 179 (additive_exp)
+    $default  reduce using rule 181 (additive_exp)
 
 
 State 146
 
-  182 mult_exp: cast_exp .
+  184 mult_exp: cast_exp .
 
-    $default  reduce using rule 182 (mult_exp)
+    $default  reduce using rule 184 (mult_exp)
 
 
 State 147
 
-  186 cast_exp: unary_exp .
+  188 cast_exp: unary_exp .
 
-    $default  reduce using rule 186 (cast_exp)
+    $default  reduce using rule 188 (cast_exp)
 
 
 State 148
 
-  191 unary_exp: unary_operator . cast_exp
+  193 unary_exp: unary_operator . cast_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -3135,14 +3143,14 @@ State 148
 
 State 149
 
-  188 unary_exp: postfix_exp .
-  201 postfix_exp: postfix_exp . BRACKET_L exp BRACKET_R
-  202            | postfix_exp . PARENTHESE_L argument_exp_list PARENTHESE_R
-  203            | postfix_exp . PARENTHESE_L PARENTHESE_R
-  204            | postfix_exp . DOT IDENTITY
-  205            | postfix_exp . PELEMENT IDENTITY
-  206            | postfix_exp . POST_ADD
-  207            | postfix_exp . POST_SUB
+  190 unary_exp: postfix_exp .
+  203 postfix_exp: postfix_exp . BRACKET_L exp BRACKET_R
+  204            | postfix_exp . PARENTHESE_L argument_exp_list PARENTHESE_R
+  205            | postfix_exp . PARENTHESE_L PARENTHESE_R
+  206            | postfix_exp . DOT IDENTITY
+  207            | postfix_exp . PELEMENT IDENTITY
+  208            | postfix_exp . POST_ADD
+  209            | postfix_exp . POST_SUB
 
     DOT           shift, and go to state 234
     PARENTHESE_L  shift, and go to state 235
@@ -3151,32 +3159,32 @@ State 149
     POST_SUB      shift, and go to state 238
     BRACKET_L     shift, and go to state 239
 
-    $default  reduce using rule 188 (unary_exp)
+    $default  reduce using rule 190 (unary_exp)
 
 
 State 150
 
-  157 const_exp: primary_exp .
-  200 postfix_exp: primary_exp .
+  159 const_exp: primary_exp .
+  202 postfix_exp: primary_exp .
 
-    COLON      reduce using rule 157 (const_exp)
-    COLON      [reduce using rule 200 (postfix_exp)]
-    COMMA      reduce using rule 157 (const_exp)
-    COMMA      [reduce using rule 200 (postfix_exp)]
-    SEMI       reduce using rule 157 (const_exp)
-    SEMI       [reduce using rule 200 (postfix_exp)]
-    BRACKET_R  reduce using rule 157 (const_exp)
-    BRACKET_R  [reduce using rule 200 (postfix_exp)]
-    BRACE_R    reduce using rule 157 (const_exp)
-    BRACE_R    [reduce using rule 200 (postfix_exp)]
-    $default   reduce using rule 200 (postfix_exp)
+    COLON      reduce using rule 159 (const_exp)
+    COLON      [reduce using rule 202 (postfix_exp)]
+    COMMA      reduce using rule 159 (const_exp)
+    COMMA      [reduce using rule 202 (postfix_exp)]
+    SEMI       reduce using rule 159 (const_exp)
+    SEMI       [reduce using rule 202 (postfix_exp)]
+    BRACKET_R  reduce using rule 159 (const_exp)
+    BRACKET_R  [reduce using rule 202 (postfix_exp)]
+    BRACE_R    reduce using rule 159 (const_exp)
+    BRACE_R    [reduce using rule 202 (postfix_exp)]
+    $default   reduce using rule 202 (postfix_exp)
 
 
 State 151
 
-  209 primary_exp: const_type .
+  211 primary_exp: const_type .
 
-    $default  reduce using rule 209 (primary_exp)
+    $default  reduce using rule 211 (primary_exp)
 
 
 State 152
@@ -3317,21 +3325,23 @@ State 160
 State 161
 
   151 assignment_exp: unary_exp . assignment_operator assignment_exp
-  186 cast_exp: unary_exp .
+  188 cast_exp: unary_exp .
 
-    ASSIGN_OP  shift, and go to state 245
-    ASSIGN     shift, and go to state 246
+    ASSIGN         shift, and go to state 245
+    ASSIGN_OP      shift, and go to state 246
+    ASSIGN_SHIFTL  shift, and go to state 247
+    ASSIGN_SHIFTR  shift, and go to state 248
 
-    $default  reduce using rule 186 (cast_exp)
+    $default  reduce using rule 188 (cast_exp)
 
-    assignment_operator  go to state 247
+    assignment_operator  go to state 249
 
 
 State 162
 
-  200 postfix_exp: primary_exp .
+  202 postfix_exp: primary_exp .
 
-    $default  reduce using rule 200 (postfix_exp)
+    $default  reduce using rule 202 (postfix_exp)
 
 
 State 163
@@ -3389,7 +3399,7 @@ State 168
     STRING        shift, and go to state 133
 
     conditional_exp   go to state 134
-    const_exp         go to state 248
+    const_exp         go to state 250
     logical_or_exp    go to state 136
     logical_and_exp   go to state 137
     inclusive_or_exp  go to state 138
@@ -3413,8 +3423,8 @@ State 169
    51 struct_decl: spec_qualifier_list struct_declarator_list . SEMI
    57 struct_declarator_list: struct_declarator_list . COMMA struct_declarator
 
-    COMMA  shift, and go to state 249
-    SEMI   shift, and go to state 250
+    COMMA  shift, and go to state 251
+    SEMI   shift, and go to state 252
 
 
 State 170
@@ -3429,7 +3439,7 @@ State 171
    58 struct_declarator: declarator .
    59                  | declarator . COLON const_exp
 
-    COLON  shift, and go to state 251
+    COLON  shift, and go to state 253
 
     $default  reduce using rule 58 (struct_declarator)
 
@@ -3453,7 +3463,7 @@ State 172
     UNSIGNED  shift, and go to state 17
     VOID      shift, and go to state 18
     VOLATILE  shift, and go to state 19
-    BRACE_R   shift, and go to state 252
+    BRACE_R   shift, and go to state 254
     IDENTITY  shift, and go to state 51
 
     type_spec             go to state 79
@@ -3477,7 +3487,7 @@ State 174
 
   120 labeled_stat: CASE const_exp . COLON stat
 
-    COLON  shift, and go to state 253
+    COLON  shift, and go to state 255
 
 
 State 175
@@ -3514,7 +3524,7 @@ State 177
     BRACE_L   shift, and go to state 58
     IDENTITY  shift, and go to state 178
 
-    stat            go to state 254
+    stat            go to state 256
     labeled_stat    go to state 102
     exp_stat        go to state 103
     compound_stat   go to state 104
@@ -3534,7 +3544,7 @@ State 179
 
   134 iteration_stat: DO stat . WHILE PARENTHESE_L exp PARENTHESE_R SEMI
 
-    WHILE  shift, and go to state 255
+    WHILE  shift, and go to state 257
 
 
 State 180
@@ -3553,7 +3563,7 @@ State 180
     SUB           shift, and go to state 121
     MUL           shift, and go to state 122
     NEG           shift, and go to state 123
-    SEMI          shift, and go to state 256
+    SEMI          shift, and go to state 258
     PARENTHESE_L  shift, and go to state 124
     POST_ADD      shift, and go to state 125
     POST_SUB      shift, and go to state 126
@@ -3564,7 +3574,7 @@ State 180
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    exp               go to state 257
+    exp               go to state 259
     assignment_exp    go to state 185
     conditional_exp   go to state 160
     logical_or_exp    go to state 136
@@ -3589,7 +3599,7 @@ State 181
 
   143 jump_stat: GOTO IDENTITY . SEMI
 
-    SEMI  shift, and go to state 258
+    SEMI  shift, and go to state 260
 
 
 State 182
@@ -3612,7 +3622,7 @@ State 182
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    exp               go to state 259
+    exp               go to state 261
     assignment_exp    go to state 185
     conditional_exp   go to state 160
     logical_or_exp    go to state 136
@@ -3645,8 +3655,8 @@ State 184
   146 jump_stat: RETURN exp . SEMI
   149 exp: exp . COMMA assignment_exp
 
-    COMMA  shift, and go to state 260
-    SEMI   shift, and go to state 261
+    COMMA  shift, and go to state 262
+    SEMI   shift, and go to state 263
 
 
 State 185
@@ -3675,7 +3685,7 @@ State 186
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    exp               go to state 262
+    exp               go to state 264
     assignment_exp    go to state 185
     conditional_exp   go to state 160
     logical_or_exp    go to state 136
@@ -3715,7 +3725,7 @@ State 187
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    exp               go to state 263
+    exp               go to state 265
     assignment_exp    go to state 185
     conditional_exp   go to state 160
     logical_or_exp    go to state 136
@@ -3756,7 +3766,7 @@ State 188
     BRACE_L   shift, and go to state 58
     IDENTITY  shift, and go to state 178
 
-    stat            go to state 264
+    stat            go to state 266
     labeled_stat    go to state 102
     exp_stat        go to state 103
     compound_stat   go to state 104
@@ -3791,7 +3801,7 @@ State 190
     WHILE     shift, and go to state 96
     SEMI      shift, and go to state 97
     BRACE_L   shift, and go to state 58
-    BRACE_R   shift, and go to state 265
+    BRACE_R   shift, and go to state 267
     IDENTITY  shift, and go to state 178
 
     stat            go to state 192
@@ -3857,7 +3867,7 @@ State 193
     declarator                  go to state 44
     direct_declarator           go to state 35
     pointer                     go to state 197
-    abstract_declarator         go to state 266
+    abstract_declarator         go to state 268
     direct_abstract_declarator  go to state 199
     typedef_name                go to state 37
 
@@ -3875,7 +3885,7 @@ State 194
     PARENTHESE_L  shift, and go to state 124
     POST_ADD      shift, and go to state 125
     POST_SUB      shift, and go to state 126
-    BRACKET_R     shift, and go to state 267
+    BRACKET_R     shift, and go to state 269
     AND_OP        shift, and go to state 128
     NOT           shift, and go to state 129
     IDENTITY      shift, and go to state 130
@@ -3884,7 +3894,7 @@ State 194
     STRING        shift, and go to state 133
 
     conditional_exp   go to state 134
-    const_exp         go to state 268
+    const_exp         go to state 270
     logical_or_exp    go to state 136
     logical_and_exp   go to state 137
     inclusive_or_exp  go to state 138
@@ -3927,7 +3937,7 @@ State 195
     UNSIGNED  shift, and go to state 17
     VOID      shift, and go to state 18
     VOLATILE  shift, and go to state 19
-    BRACE_R   shift, and go to state 269
+    BRACE_R   shift, and go to state 271
     IDENTITY  shift, and go to state 51
 
     decl_specs            go to state 114
@@ -3937,7 +3947,7 @@ State 195
     struct_or_union_spec  go to state 31
     struct_or_union       go to state 32
     enum_spec             go to state 33
-    param_type_list       go to state 270
+    param_type_list       go to state 272
     param_list            go to state 116
     param_decl            go to state 117
     typedef_name          go to state 37
@@ -3964,7 +3974,7 @@ State 197
     $default  reduce using rule 100 (abstract_declarator)
 
     direct_declarator           go to state 66
-    direct_abstract_declarator  go to state 271
+    direct_abstract_declarator  go to state 273
 
 
 State 198
@@ -3982,8 +3992,8 @@ State 199
   108                           | direct_abstract_declarator . BRACE_L param_type_list BRACE_R
   110                           | direct_abstract_declarator . BRACE_L BRACE_R
 
-    BRACKET_L  shift, and go to state 272
-    BRACE_L    shift, and go to state 273
+    BRACKET_L  shift, and go to state 274
+    BRACE_L    shift, and go to state 275
 
     $default  reduce using rule 102 (abstract_declarator)
 
@@ -4004,7 +4014,7 @@ State 201
     CHAR      shift, and go to state 2
     CONST     shift, and go to state 3
     DOUBLE    shift, and go to state 4
-    ELLIPSIS  shift, and go to state 274
+    ELLIPSIS  shift, and go to state 276
     ENUM      shift, and go to state 5
     EXTERN    shift, and go to state 6
     FLOAT     shift, and go to state 7
@@ -4029,7 +4039,7 @@ State 201
     struct_or_union_spec  go to state 31
     struct_or_union       go to state 32
     enum_spec             go to state 33
-    param_decl            go to state 275
+    param_decl            go to state 277
     typedef_name          go to state 37
 
 
@@ -4037,7 +4047,7 @@ State 202
 
    92 id_list: id_list COMMA . IDENTITY
 
-    IDENTITY  shift, and go to state 276
+    IDENTITY  shift, and go to state 278
 
 
 State 203
@@ -4049,8 +4059,8 @@ State 203
 
 State 204
 
-  193 unary_exp: SIZEOF PARENTHESE_L . type_name PARENTHESE_R
-  211 primary_exp: PARENTHESE_L . exp PARENTHESE_R
+  195 unary_exp: SIZEOF PARENTHESE_L . type_name PARENTHESE_R
+  213 primary_exp: PARENTHESE_L . exp PARENTHESE_R
 
     CHAR          shift, and go to state 2
     CONST         shift, and go to state 3
@@ -4087,7 +4097,7 @@ State 204
     struct_or_union       go to state 32
     spec_qualifier_list   go to state 207
     enum_spec             go to state 33
-    type_name             go to state 277
+    type_name             go to state 279
     typedef_name          go to state 37
     exp                   go to state 209
     assignment_exp        go to state 185
@@ -4112,15 +4122,15 @@ State 204
 
 State 205
 
-  192 unary_exp: SIZEOF unary_exp .
+  194 unary_exp: SIZEOF unary_exp .
 
-    $default  reduce using rule 192 (unary_exp)
+    $default  reduce using rule 194 (unary_exp)
 
 
 State 206
 
   112 typedef_name: IDENTITY .
-  208 primary_exp: IDENTITY .
+  210 primary_exp: IDENTITY .
 
     CHAR          reduce using rule 112 (typedef_name)
     CONST         reduce using rule 112 (typedef_name)
@@ -4137,16 +4147,16 @@ State 206
     VOID          reduce using rule 112 (typedef_name)
     VOLATILE      reduce using rule 112 (typedef_name)
     MUL           reduce using rule 112 (typedef_name)
-    MUL           [reduce using rule 208 (primary_exp)]
+    MUL           [reduce using rule 210 (primary_exp)]
     PARENTHESE_L  reduce using rule 112 (typedef_name)
-    PARENTHESE_L  [reduce using rule 208 (primary_exp)]
+    PARENTHESE_L  [reduce using rule 210 (primary_exp)]
     PARENTHESE_R  reduce using rule 112 (typedef_name)
-    PARENTHESE_R  [reduce using rule 208 (primary_exp)]
+    PARENTHESE_R  [reduce using rule 210 (primary_exp)]
     BRACKET_L     reduce using rule 112 (typedef_name)
-    BRACKET_L     [reduce using rule 208 (primary_exp)]
+    BRACKET_L     [reduce using rule 210 (primary_exp)]
     BRACE_L       reduce using rule 112 (typedef_name)
     IDENTITY      reduce using rule 112 (typedef_name)
-    $default      reduce using rule 208 (primary_exp)
+    $default      reduce using rule 210 (primary_exp)
 
 
 State 207
@@ -4155,36 +4165,36 @@ State 207
    99          | spec_qualifier_list .
 
     MUL           shift, and go to state 20
-    PARENTHESE_L  shift, and go to state 278
+    PARENTHESE_L  shift, and go to state 280
     BRACKET_L     shift, and go to state 194
     BRACE_L       shift, and go to state 195
 
     $default  reduce using rule 99 (type_name)
 
-    pointer                     go to state 279
-    abstract_declarator         go to state 280
+    pointer                     go to state 281
+    abstract_declarator         go to state 282
     direct_abstract_declarator  go to state 199
 
 
 State 208
 
-  187 cast_exp: PARENTHESE_L type_name . PARENTHESE_R cast_exp
+  189 cast_exp: PARENTHESE_L type_name . PARENTHESE_R cast_exp
 
-    PARENTHESE_R  shift, and go to state 281
+    PARENTHESE_R  shift, and go to state 283
 
 
 State 209
 
   149 exp: exp . COMMA assignment_exp
-  211 primary_exp: PARENTHESE_L exp . PARENTHESE_R
+  213 primary_exp: PARENTHESE_L exp . PARENTHESE_R
 
-    COMMA         shift, and go to state 260
-    PARENTHESE_R  shift, and go to state 282
+    COMMA         shift, and go to state 262
+    PARENTHESE_R  shift, and go to state 284
 
 
 State 210
 
-  211 primary_exp: PARENTHESE_L . exp PARENTHESE_R
+  213 primary_exp: PARENTHESE_L . exp PARENTHESE_R
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4224,16 +4234,16 @@ State 210
 
 State 211
 
-  189 unary_exp: POST_ADD unary_exp .
+  191 unary_exp: POST_ADD unary_exp .
 
-    $default  reduce using rule 189 (unary_exp)
+    $default  reduce using rule 191 (unary_exp)
 
 
 State 212
 
-  190 unary_exp: POST_SUB unary_exp .
+  192 unary_exp: POST_SUB unary_exp .
 
-    $default  reduce using rule 190 (unary_exp)
+    $default  reduce using rule 192 (unary_exp)
 
 
 State 213
@@ -4245,7 +4255,7 @@ State 213
 
 State 214
 
-  159 logical_or_exp: logical_or_exp OR . logical_and_exp
+  161 logical_or_exp: logical_or_exp OR . logical_and_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4262,7 +4272,7 @@ State 214
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    logical_and_exp   go to state 283
+    logical_and_exp   go to state 285
     inclusive_or_exp  go to state 138
     exclusive_or_exp  go to state 139
     and_exp           go to state 140
@@ -4281,7 +4291,7 @@ State 214
 
 State 215
 
-  155 conditional_exp: logical_or_exp QUES . exp COLON
+  157 conditional_exp: logical_or_exp QUES . exp COLON
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4298,7 +4308,7 @@ State 215
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    exp               go to state 284
+    exp               go to state 286
     assignment_exp    go to state 185
     conditional_exp   go to state 160
     logical_or_exp    go to state 136
@@ -4321,7 +4331,7 @@ State 215
 
 State 216
 
-  161 logical_and_exp: logical_and_exp AND . inclusive_or_exp
+  163 logical_and_exp: logical_and_exp AND . inclusive_or_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4338,7 +4348,7 @@ State 216
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    inclusive_or_exp  go to state 285
+    inclusive_or_exp  go to state 287
     exclusive_or_exp  go to state 139
     and_exp           go to state 140
     equality_exp      go to state 141
@@ -4356,7 +4366,7 @@ State 216
 
 State 217
 
-  163 inclusive_or_exp: inclusive_or_exp OR_OP . exclusive_or_exp
+  165 inclusive_or_exp: inclusive_or_exp OR_OP . exclusive_or_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4373,7 +4383,7 @@ State 217
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    exclusive_or_exp  go to state 286
+    exclusive_or_exp  go to state 288
     and_exp           go to state 140
     equality_exp      go to state 141
     relational_exp    go to state 142
@@ -4390,7 +4400,7 @@ State 217
 
 State 218
 
-  165 exclusive_or_exp: exclusive_or_exp XOR_OP . and_exp
+  167 exclusive_or_exp: exclusive_or_exp XOR_OP . and_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4407,7 +4417,7 @@ State 218
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    and_exp           go to state 287
+    and_exp           go to state 289
     equality_exp      go to state 141
     relational_exp    go to state 142
     shift_expression  go to state 143
@@ -4423,7 +4433,7 @@ State 218
 
 State 219
 
-  167 and_exp: and_exp AND_OP . equality_exp
+  169 and_exp: and_exp AND_OP . equality_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4440,7 +4450,7 @@ State 219
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    equality_exp      go to state 288
+    equality_exp      go to state 290
     relational_exp    go to state 142
     shift_expression  go to state 143
     additive_exp      go to state 144
@@ -4455,7 +4465,7 @@ State 219
 
 State 220
 
-  169 equality_exp: equality_exp EQUAL . relational_exp
+  171 equality_exp: equality_exp EQUAL . relational_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4472,7 +4482,7 @@ State 220
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    relational_exp    go to state 289
+    relational_exp    go to state 291
     shift_expression  go to state 143
     additive_exp      go to state 144
     mult_exp          go to state 145
@@ -4486,7 +4496,7 @@ State 220
 
 State 221
 
-  170 equality_exp: equality_exp NOT_EQUAL . relational_exp
+  172 equality_exp: equality_exp NOT_EQUAL . relational_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4503,7 +4513,7 @@ State 221
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    relational_exp    go to state 290
+    relational_exp    go to state 292
     shift_expression  go to state 143
     additive_exp      go to state 144
     mult_exp          go to state 145
@@ -4517,67 +4527,7 @@ State 221
 
 State 222
 
-  172 relational_exp: relational_exp LESSER . shift_expression
-
-    SIZEOF        shift, and go to state 119
-    ADD           shift, and go to state 120
-    SUB           shift, and go to state 121
-    MUL           shift, and go to state 122
-    NEG           shift, and go to state 123
-    PARENTHESE_L  shift, and go to state 124
-    POST_ADD      shift, and go to state 125
-    POST_SUB      shift, and go to state 126
-    AND_OP        shift, and go to state 128
-    NOT           shift, and go to state 129
-    IDENTITY      shift, and go to state 130
-    INT_NUM       shift, and go to state 131
-    FLOAT_NUM     shift, and go to state 132
-    STRING        shift, and go to state 133
-
-    shift_expression  go to state 291
-    additive_exp      go to state 144
-    mult_exp          go to state 145
-    cast_exp          go to state 146
-    unary_exp         go to state 147
-    unary_operator    go to state 148
-    postfix_exp       go to state 149
-    primary_exp       go to state 162
-    const_type        go to state 151
-
-
-State 223
-
-  173 relational_exp: relational_exp GREATER . shift_expression
-
-    SIZEOF        shift, and go to state 119
-    ADD           shift, and go to state 120
-    SUB           shift, and go to state 121
-    MUL           shift, and go to state 122
-    NEG           shift, and go to state 123
-    PARENTHESE_L  shift, and go to state 124
-    POST_ADD      shift, and go to state 125
-    POST_SUB      shift, and go to state 126
-    AND_OP        shift, and go to state 128
-    NOT           shift, and go to state 129
-    IDENTITY      shift, and go to state 130
-    INT_NUM       shift, and go to state 131
-    FLOAT_NUM     shift, and go to state 132
-    STRING        shift, and go to state 133
-
-    shift_expression  go to state 292
-    additive_exp      go to state 144
-    mult_exp          go to state 145
-    cast_exp          go to state 146
-    unary_exp         go to state 147
-    unary_operator    go to state 148
-    postfix_exp       go to state 149
-    primary_exp       go to state 162
-    const_type        go to state 151
-
-
-State 224
-
-  174 relational_exp: relational_exp LEQUAL . shift_expression
+  174 relational_exp: relational_exp LESSER . shift_expression
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4605,9 +4555,9 @@ State 224
     const_type        go to state 151
 
 
-State 225
+State 223
 
-  175 relational_exp: relational_exp GEQUAL . shift_expression
+  175 relational_exp: relational_exp GREATER . shift_expression
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4635,9 +4585,9 @@ State 225
     const_type        go to state 151
 
 
-State 226
+State 224
 
-  177 shift_expression: shift_expression MOVE_L . additive_exp
+  176 relational_exp: relational_exp LEQUAL . shift_expression
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4654,7 +4604,67 @@ State 226
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    additive_exp    go to state 295
+    shift_expression  go to state 295
+    additive_exp      go to state 144
+    mult_exp          go to state 145
+    cast_exp          go to state 146
+    unary_exp         go to state 147
+    unary_operator    go to state 148
+    postfix_exp       go to state 149
+    primary_exp       go to state 162
+    const_type        go to state 151
+
+
+State 225
+
+  177 relational_exp: relational_exp GEQUAL . shift_expression
+
+    SIZEOF        shift, and go to state 119
+    ADD           shift, and go to state 120
+    SUB           shift, and go to state 121
+    MUL           shift, and go to state 122
+    NEG           shift, and go to state 123
+    PARENTHESE_L  shift, and go to state 124
+    POST_ADD      shift, and go to state 125
+    POST_SUB      shift, and go to state 126
+    AND_OP        shift, and go to state 128
+    NOT           shift, and go to state 129
+    IDENTITY      shift, and go to state 130
+    INT_NUM       shift, and go to state 131
+    FLOAT_NUM     shift, and go to state 132
+    STRING        shift, and go to state 133
+
+    shift_expression  go to state 296
+    additive_exp      go to state 144
+    mult_exp          go to state 145
+    cast_exp          go to state 146
+    unary_exp         go to state 147
+    unary_operator    go to state 148
+    postfix_exp       go to state 149
+    primary_exp       go to state 162
+    const_type        go to state 151
+
+
+State 226
+
+  179 shift_expression: shift_expression MOVE_L . additive_exp
+
+    SIZEOF        shift, and go to state 119
+    ADD           shift, and go to state 120
+    SUB           shift, and go to state 121
+    MUL           shift, and go to state 122
+    NEG           shift, and go to state 123
+    PARENTHESE_L  shift, and go to state 124
+    POST_ADD      shift, and go to state 125
+    POST_SUB      shift, and go to state 126
+    AND_OP        shift, and go to state 128
+    NOT           shift, and go to state 129
+    IDENTITY      shift, and go to state 130
+    INT_NUM       shift, and go to state 131
+    FLOAT_NUM     shift, and go to state 132
+    STRING        shift, and go to state 133
+
+    additive_exp    go to state 297
     mult_exp        go to state 145
     cast_exp        go to state 146
     unary_exp       go to state 147
@@ -4666,7 +4676,7 @@ State 226
 
 State 227
 
-  178 shift_expression: shift_expression MOVE_R . additive_exp
+  180 shift_expression: shift_expression MOVE_R . additive_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4683,7 +4693,7 @@ State 227
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    additive_exp    go to state 296
+    additive_exp    go to state 298
     mult_exp        go to state 145
     cast_exp        go to state 146
     unary_exp       go to state 147
@@ -4695,7 +4705,7 @@ State 227
 
 State 228
 
-  180 additive_exp: additive_exp ADD . mult_exp
+  182 additive_exp: additive_exp ADD . mult_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4712,7 +4722,7 @@ State 228
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    mult_exp        go to state 297
+    mult_exp        go to state 299
     cast_exp        go to state 146
     unary_exp       go to state 147
     unary_operator  go to state 148
@@ -4723,7 +4733,7 @@ State 228
 
 State 229
 
-  181 additive_exp: additive_exp SUB . mult_exp
+  183 additive_exp: additive_exp SUB . mult_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4740,7 +4750,7 @@ State 229
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    mult_exp        go to state 298
+    mult_exp        go to state 300
     cast_exp        go to state 146
     unary_exp       go to state 147
     unary_operator  go to state 148
@@ -4751,61 +4761,7 @@ State 229
 
 State 230
 
-  183 mult_exp: mult_exp MUL . cast_exp
-
-    SIZEOF        shift, and go to state 119
-    ADD           shift, and go to state 120
-    SUB           shift, and go to state 121
-    MUL           shift, and go to state 122
-    NEG           shift, and go to state 123
-    PARENTHESE_L  shift, and go to state 124
-    POST_ADD      shift, and go to state 125
-    POST_SUB      shift, and go to state 126
-    AND_OP        shift, and go to state 128
-    NOT           shift, and go to state 129
-    IDENTITY      shift, and go to state 130
-    INT_NUM       shift, and go to state 131
-    FLOAT_NUM     shift, and go to state 132
-    STRING        shift, and go to state 133
-
-    cast_exp        go to state 299
-    unary_exp       go to state 147
-    unary_operator  go to state 148
-    postfix_exp     go to state 149
-    primary_exp     go to state 162
-    const_type      go to state 151
-
-
-State 231
-
-  184 mult_exp: mult_exp DIV . cast_exp
-
-    SIZEOF        shift, and go to state 119
-    ADD           shift, and go to state 120
-    SUB           shift, and go to state 121
-    MUL           shift, and go to state 122
-    NEG           shift, and go to state 123
-    PARENTHESE_L  shift, and go to state 124
-    POST_ADD      shift, and go to state 125
-    POST_SUB      shift, and go to state 126
-    AND_OP        shift, and go to state 128
-    NOT           shift, and go to state 129
-    IDENTITY      shift, and go to state 130
-    INT_NUM       shift, and go to state 131
-    FLOAT_NUM     shift, and go to state 132
-    STRING        shift, and go to state 133
-
-    cast_exp        go to state 300
-    unary_exp       go to state 147
-    unary_operator  go to state 148
-    postfix_exp     go to state 149
-    primary_exp     go to state 162
-    const_type      go to state 151
-
-
-State 232
-
-  185 mult_exp: mult_exp MOD . cast_exp
+  185 mult_exp: mult_exp MUL . cast_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4830,24 +4786,9 @@ State 232
     const_type      go to state 151
 
 
-State 233
+State 231
 
-  191 unary_exp: unary_operator cast_exp .
-
-    $default  reduce using rule 191 (unary_exp)
-
-
-State 234
-
-  204 postfix_exp: postfix_exp DOT . IDENTITY
-
-    IDENTITY  shift, and go to state 302
-
-
-State 235
-
-  202 postfix_exp: postfix_exp PARENTHESE_L . argument_exp_list PARENTHESE_R
-  203            | postfix_exp PARENTHESE_L . PARENTHESE_R
+  186 mult_exp: mult_exp DIV . cast_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4855,7 +4796,6 @@ State 235
     MUL           shift, and go to state 122
     NEG           shift, and go to state 123
     PARENTHESE_L  shift, and go to state 124
-    PARENTHESE_R  shift, and go to state 303
     POST_ADD      shift, and go to state 125
     POST_SUB      shift, and go to state 126
     AND_OP        shift, and go to state 128
@@ -4865,7 +4805,77 @@ State 235
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    assignment_exp     go to state 304
+    cast_exp        go to state 302
+    unary_exp       go to state 147
+    unary_operator  go to state 148
+    postfix_exp     go to state 149
+    primary_exp     go to state 162
+    const_type      go to state 151
+
+
+State 232
+
+  187 mult_exp: mult_exp MOD . cast_exp
+
+    SIZEOF        shift, and go to state 119
+    ADD           shift, and go to state 120
+    SUB           shift, and go to state 121
+    MUL           shift, and go to state 122
+    NEG           shift, and go to state 123
+    PARENTHESE_L  shift, and go to state 124
+    POST_ADD      shift, and go to state 125
+    POST_SUB      shift, and go to state 126
+    AND_OP        shift, and go to state 128
+    NOT           shift, and go to state 129
+    IDENTITY      shift, and go to state 130
+    INT_NUM       shift, and go to state 131
+    FLOAT_NUM     shift, and go to state 132
+    STRING        shift, and go to state 133
+
+    cast_exp        go to state 303
+    unary_exp       go to state 147
+    unary_operator  go to state 148
+    postfix_exp     go to state 149
+    primary_exp     go to state 162
+    const_type      go to state 151
+
+
+State 233
+
+  193 unary_exp: unary_operator cast_exp .
+
+    $default  reduce using rule 193 (unary_exp)
+
+
+State 234
+
+  206 postfix_exp: postfix_exp DOT . IDENTITY
+
+    IDENTITY  shift, and go to state 304
+
+
+State 235
+
+  204 postfix_exp: postfix_exp PARENTHESE_L . argument_exp_list PARENTHESE_R
+  205            | postfix_exp PARENTHESE_L . PARENTHESE_R
+
+    SIZEOF        shift, and go to state 119
+    ADD           shift, and go to state 120
+    SUB           shift, and go to state 121
+    MUL           shift, and go to state 122
+    NEG           shift, and go to state 123
+    PARENTHESE_L  shift, and go to state 124
+    PARENTHESE_R  shift, and go to state 305
+    POST_ADD      shift, and go to state 125
+    POST_SUB      shift, and go to state 126
+    AND_OP        shift, and go to state 128
+    NOT           shift, and go to state 129
+    IDENTITY      shift, and go to state 130
+    INT_NUM       shift, and go to state 131
+    FLOAT_NUM     shift, and go to state 132
+    STRING        shift, and go to state 133
+
+    assignment_exp     go to state 306
     conditional_exp    go to state 160
     logical_or_exp     go to state 136
     logical_and_exp    go to state 137
@@ -4882,34 +4892,34 @@ State 235
     unary_operator     go to state 148
     postfix_exp        go to state 149
     primary_exp        go to state 162
-    argument_exp_list  go to state 305
+    argument_exp_list  go to state 307
     const_type         go to state 151
 
 
 State 236
 
-  205 postfix_exp: postfix_exp PELEMENT . IDENTITY
+  207 postfix_exp: postfix_exp PELEMENT . IDENTITY
 
-    IDENTITY  shift, and go to state 306
+    IDENTITY  shift, and go to state 308
 
 
 State 237
 
-  206 postfix_exp: postfix_exp POST_ADD .
+  208 postfix_exp: postfix_exp POST_ADD .
 
-    $default  reduce using rule 206 (postfix_exp)
+    $default  reduce using rule 208 (postfix_exp)
 
 
 State 238
 
-  207 postfix_exp: postfix_exp POST_SUB .
+  209 postfix_exp: postfix_exp POST_SUB .
 
-    $default  reduce using rule 207 (postfix_exp)
+    $default  reduce using rule 209 (postfix_exp)
 
 
 State 239
 
-  201 postfix_exp: postfix_exp BRACKET_L . exp BRACKET_R
+  203 postfix_exp: postfix_exp BRACKET_L . exp BRACKET_R
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -4926,7 +4936,7 @@ State 239
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    exp               go to state 307
+    exp               go to state 309
     assignment_exp    go to state 185
     conditional_exp   go to state 160
     logical_or_exp    go to state 136
@@ -4981,25 +4991,39 @@ State 244
    95            | BRACE_L initializer_list . COMMA BRACE_R
    97 initializer_list: initializer_list . COMMA initializer
 
-    COMMA    shift, and go to state 308
-    BRACE_R  shift, and go to state 309
+    COMMA    shift, and go to state 310
+    BRACE_R  shift, and go to state 311
 
 
 State 245
-
-  153 assignment_operator: ASSIGN_OP .
-
-    $default  reduce using rule 153 (assignment_operator)
-
-
-State 246
 
   152 assignment_operator: ASSIGN .
 
     $default  reduce using rule 152 (assignment_operator)
 
 
+State 246
+
+  153 assignment_operator: ASSIGN_OP .
+
+    $default  reduce using rule 153 (assignment_operator)
+
+
 State 247
+
+  154 assignment_operator: ASSIGN_SHIFTL .
+
+    $default  reduce using rule 154 (assignment_operator)
+
+
+State 248
+
+  155 assignment_operator: ASSIGN_SHIFTR .
+
+    $default  reduce using rule 155 (assignment_operator)
+
+
+State 249
 
   151 assignment_exp: unary_exp assignment_operator . assignment_exp
 
@@ -5018,7 +5042,7 @@ State 247
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    assignment_exp    go to state 310
+    assignment_exp    go to state 312
     conditional_exp   go to state 160
     logical_or_exp    go to state 136
     logical_and_exp   go to state 137
@@ -5038,14 +5062,14 @@ State 247
     const_type        go to state 151
 
 
-State 248
+State 250
 
    60 struct_declarator: COLON const_exp .
 
     $default  reduce using rule 60 (struct_declarator)
 
 
-State 249
+State 251
 
    57 struct_declarator_list: struct_declarator_list COMMA . struct_declarator
 
@@ -5079,7 +5103,7 @@ State 249
     type_qualifier        go to state 30
     struct_or_union_spec  go to state 31
     struct_or_union       go to state 32
-    struct_declarator     go to state 311
+    struct_declarator     go to state 313
     enum_spec             go to state 33
     declarator            go to state 171
     direct_declarator     go to state 35
@@ -5087,14 +5111,14 @@ State 249
     typedef_name          go to state 37
 
 
-State 250
+State 252
 
    51 struct_decl: spec_qualifier_list struct_declarator_list SEMI .
 
     $default  reduce using rule 51 (struct_decl)
 
 
-State 251
+State 253
 
    59 struct_declarator: declarator COLON . const_exp
 
@@ -5114,7 +5138,7 @@ State 251
     STRING        shift, and go to state 133
 
     conditional_exp   go to state 134
-    const_exp         go to state 312
+    const_exp         go to state 314
     logical_or_exp    go to state 136
     logical_and_exp   go to state 137
     inclusive_or_exp  go to state 138
@@ -5133,14 +5157,14 @@ State 251
     const_type        go to state 151
 
 
-State 252
+State 254
 
    40 struct_or_union_spec: struct_or_union IDENTITY BRACE_L struct_decl_list BRACE_R .
 
     $default  reduce using rule 40 (struct_or_union_spec)
 
 
-State 253
+State 255
 
   120 labeled_stat: CASE const_exp COLON . stat
 
@@ -5160,7 +5184,7 @@ State 253
     BRACE_L   shift, and go to state 58
     IDENTITY  shift, and go to state 178
 
-    stat            go to state 313
+    stat            go to state 315
     labeled_stat    go to state 102
     exp_stat        go to state 103
     compound_stat   go to state 104
@@ -5169,21 +5193,21 @@ State 253
     jump_stat       go to state 108
 
 
-State 254
+State 256
 
   121 labeled_stat: DEFAULT COLON stat .
 
     $default  reduce using rule 121 (labeled_stat)
 
 
-State 255
+State 257
 
   134 iteration_stat: DO stat WHILE . PARENTHESE_L exp PARENTHESE_R SEMI
 
-    PARENTHESE_L  shift, and go to state 314
+    PARENTHESE_L  shift, and go to state 316
 
 
-State 256
+State 258
 
   139 iteration_stat: FOR PARENTHESE_L SEMI . exp SEMI exp PARENTHESE_R stat
   140               | FOR PARENTHESE_L SEMI . exp SEMI PARENTHESE_R stat
@@ -5195,7 +5219,7 @@ State 256
     SUB           shift, and go to state 121
     MUL           shift, and go to state 122
     NEG           shift, and go to state 123
-    SEMI          shift, and go to state 315
+    SEMI          shift, and go to state 317
     PARENTHESE_L  shift, and go to state 124
     POST_ADD      shift, and go to state 125
     POST_SUB      shift, and go to state 126
@@ -5206,7 +5230,7 @@ State 256
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    exp               go to state 316
+    exp               go to state 318
     assignment_exp    go to state 185
     conditional_exp   go to state 160
     logical_or_exp    go to state 136
@@ -5227,7 +5251,7 @@ State 256
     const_type        go to state 151
 
 
-State 257
+State 259
 
   135 iteration_stat: FOR PARENTHESE_L exp . SEMI exp SEMI exp PARENTHESE_R stat
   136               | FOR PARENTHESE_L exp . SEMI exp SEMI PARENTHESE_R stat
@@ -5235,28 +5259,28 @@ State 257
   138               | FOR PARENTHESE_L exp . SEMI SEMI PARENTHESE_R stat
   149 exp: exp . COMMA assignment_exp
 
-    COMMA  shift, and go to state 260
-    SEMI   shift, and go to state 317
+    COMMA  shift, and go to state 262
+    SEMI   shift, and go to state 319
 
 
-State 258
+State 260
 
   143 jump_stat: GOTO IDENTITY SEMI .
 
     $default  reduce using rule 143 (jump_stat)
 
 
-State 259
+State 261
 
   130 selection_stat: IF PARENTHESE_L exp . PARENTHESE_R stat
   131               | IF PARENTHESE_L exp . PARENTHESE_R stat ELSE stat
   149 exp: exp . COMMA assignment_exp
 
-    COMMA         shift, and go to state 260
-    PARENTHESE_R  shift, and go to state 318
+    COMMA         shift, and go to state 262
+    PARENTHESE_R  shift, and go to state 320
 
 
-State 260
+State 262
 
   149 exp: exp COMMA . assignment_exp
 
@@ -5275,7 +5299,7 @@ State 260
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    assignment_exp    go to state 319
+    assignment_exp    go to state 321
     conditional_exp   go to state 160
     logical_or_exp    go to state 136
     logical_and_exp   go to state 137
@@ -5295,81 +5319,81 @@ State 260
     const_type        go to state 151
 
 
-State 261
+State 263
 
   146 jump_stat: RETURN exp SEMI .
 
     $default  reduce using rule 146 (jump_stat)
 
 
-State 262
+State 264
 
   132 selection_stat: SWITCH PARENTHESE_L exp . PARENTHESE_R stat
   149 exp: exp . COMMA assignment_exp
 
-    COMMA         shift, and go to state 260
-    PARENTHESE_R  shift, and go to state 320
+    COMMA         shift, and go to state 262
+    PARENTHESE_R  shift, and go to state 322
 
 
-State 263
+State 265
 
   133 iteration_stat: WHILE PARENTHESE_L exp . PARENTHESE_R stat
   149 exp: exp . COMMA assignment_exp
 
-    COMMA         shift, and go to state 260
-    PARENTHESE_R  shift, and go to state 321
+    COMMA         shift, and go to state 262
+    PARENTHESE_R  shift, and go to state 323
 
 
-State 264
+State 266
 
   119 labeled_stat: IDENTITY COLON stat .
 
     $default  reduce using rule 119 (labeled_stat)
 
 
-State 265
+State 267
 
   124 compound_stat: BRACE_L decl_list stat_list BRACE_R .
 
     $default  reduce using rule 124 (compound_stat)
 
 
-State 266
+State 268
 
   103 direct_abstract_declarator: PARENTHESE_L abstract_declarator . PARENTHESE_R
 
-    PARENTHESE_R  shift, and go to state 322
+    PARENTHESE_R  shift, and go to state 324
 
 
-State 267
+State 269
 
   107 direct_abstract_declarator: BRACKET_L BRACKET_R .
 
     $default  reduce using rule 107 (direct_abstract_declarator)
 
 
-State 268
+State 270
 
   105 direct_abstract_declarator: BRACKET_L const_exp . BRACKET_R
 
-    BRACKET_R  shift, and go to state 323
+    BRACKET_R  shift, and go to state 325
 
 
-State 269
+State 271
 
   111 direct_abstract_declarator: BRACE_L BRACE_R .
 
     $default  reduce using rule 111 (direct_abstract_declarator)
 
 
-State 270
+State 272
 
   109 direct_abstract_declarator: BRACE_L param_type_list . BRACE_R
 
-    BRACE_R  shift, and go to state 324
+    BRACE_R  shift, and go to state 326
 
 
-State 271
+State 273
 
   101 abstract_declarator: pointer direct_abstract_declarator .
   104 direct_abstract_declarator: direct_abstract_declarator . BRACKET_L const_exp BRACKET_R
@@ -5377,13 +5401,13 @@ State 271
   108                           | direct_abstract_declarator . BRACE_L param_type_list BRACE_R
   110                           | direct_abstract_declarator . BRACE_L BRACE_R
 
-    BRACKET_L  shift, and go to state 272
-    BRACE_L    shift, and go to state 273
+    BRACKET_L  shift, and go to state 274
+    BRACE_L    shift, and go to state 275
 
     $default  reduce using rule 101 (abstract_declarator)
 
 
-State 272
+State 274
 
   104 direct_abstract_declarator: direct_abstract_declarator BRACKET_L . const_exp BRACKET_R
   106                           | direct_abstract_declarator BRACKET_L . BRACKET_R
@@ -5396,7 +5420,7 @@ State 272
     PARENTHESE_L  shift, and go to state 124
     POST_ADD      shift, and go to state 125
     POST_SUB      shift, and go to state 126
-    BRACKET_R     shift, and go to state 325
+    BRACKET_R     shift, and go to state 327
     AND_OP        shift, and go to state 128
     NOT           shift, and go to state 129
     IDENTITY      shift, and go to state 130
@@ -5405,7 +5429,7 @@ State 272
     STRING        shift, and go to state 133
 
     conditional_exp   go to state 134
-    const_exp         go to state 326
+    const_exp         go to state 328
     logical_or_exp    go to state 136
     logical_and_exp   go to state 137
     inclusive_or_exp  go to state 138
@@ -5424,7 +5448,7 @@ State 272
     const_type        go to state 151
 
 
-State 273
+State 275
 
   108 direct_abstract_declarator: direct_abstract_declarator BRACE_L . param_type_list BRACE_R
   110                           | direct_abstract_declarator BRACE_L . BRACE_R
@@ -5448,7 +5472,7 @@ State 273
     UNSIGNED  shift, and go to state 17
     VOID      shift, and go to state 18
     VOLATILE  shift, and go to state 19
-    BRACE_R   shift, and go to state 327
+    BRACE_R   shift, and go to state 329
     IDENTITY  shift, and go to state 51
 
     decl_specs            go to state 114
@@ -5458,78 +5482,78 @@ State 273
     struct_or_union_spec  go to state 31
     struct_or_union       go to state 32
     enum_spec             go to state 33
-    param_type_list       go to state 328
+    param_type_list       go to state 330
     param_list            go to state 116
     param_decl            go to state 117
     typedef_name          go to state 37
 
 
-State 274
+State 276
 
    85 param_type_list: param_list COMMA ELLIPSIS .
 
     $default  reduce using rule 85 (param_type_list)
 
 
-State 275
+State 277
 
    87 param_list: param_list COMMA param_decl .
 
     $default  reduce using rule 87 (param_list)
 
 
-State 276
+State 278
 
    92 id_list: id_list COMMA IDENTITY .
 
     $default  reduce using rule 92 (id_list)
 
 
-State 277
+State 279
 
-  193 unary_exp: SIZEOF PARENTHESE_L type_name . PARENTHESE_R
+  195 unary_exp: SIZEOF PARENTHESE_L type_name . PARENTHESE_R
 
-    PARENTHESE_R  shift, and go to state 329
+    PARENTHESE_R  shift, and go to state 331
 
 
-State 278
+State 280
 
   103 direct_abstract_declarator: PARENTHESE_L . abstract_declarator PARENTHESE_R
 
     MUL           shift, and go to state 20
-    PARENTHESE_L  shift, and go to state 278
+    PARENTHESE_L  shift, and go to state 280
     BRACKET_L     shift, and go to state 194
     BRACE_L       shift, and go to state 195
 
-    pointer                     go to state 279
-    abstract_declarator         go to state 266
+    pointer                     go to state 281
+    abstract_declarator         go to state 268
     direct_abstract_declarator  go to state 199
 
 
-State 279
+State 281
 
   100 abstract_declarator: pointer .
   101                    | pointer . direct_abstract_declarator
 
-    PARENTHESE_L  shift, and go to state 278
+    PARENTHESE_L  shift, and go to state 280
     BRACKET_L     shift, and go to state 194
     BRACE_L       shift, and go to state 195
 
     $default  reduce using rule 100 (abstract_declarator)
 
-    direct_abstract_declarator  go to state 271
+    direct_abstract_declarator  go to state 273
 
 
-State 280
+State 282
 
    98 type_name: spec_qualifier_list abstract_declarator .
 
     $default  reduce using rule 98 (type_name)
 
 
-State 281
+State 283
 
-  187 cast_exp: PARENTHESE_L type_name PARENTHESE_R . cast_exp
+  189 cast_exp: PARENTHESE_L type_name PARENTHESE_R . cast_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -5546,7 +5570,7 @@ State 281
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    cast_exp        go to state 330
+    cast_exp        go to state 332
     unary_exp       go to state 147
     unary_operator  go to state 148
     postfix_exp     go to state 149
@@ -5554,135 +5578,111 @@ State 281
     const_type      go to state 151
 
 
-State 282
-
-  211 primary_exp: PARENTHESE_L exp PARENTHESE_R .
-
-    $default  reduce using rule 211 (primary_exp)
-
-
-State 283
-
-  159 logical_or_exp: logical_or_exp OR logical_and_exp .
-  161 logical_and_exp: logical_and_exp . AND inclusive_or_exp
-
-    AND  shift, and go to state 216
-
-    $default  reduce using rule 159 (logical_or_exp)
-
-
 State 284
 
-  149 exp: exp . COMMA assignment_exp
-  155 conditional_exp: logical_or_exp QUES exp . COLON
+  213 primary_exp: PARENTHESE_L exp PARENTHESE_R .
 
-    COLON  shift, and go to state 331
-    COMMA  shift, and go to state 260
+    $default  reduce using rule 213 (primary_exp)
 
 
 State 285
 
-  161 logical_and_exp: logical_and_exp AND inclusive_or_exp .
-  163 inclusive_or_exp: inclusive_or_exp . OR_OP exclusive_or_exp
+  161 logical_or_exp: logical_or_exp OR logical_and_exp .
+  163 logical_and_exp: logical_and_exp . AND inclusive_or_exp
 
-    OR_OP  shift, and go to state 217
+    AND  shift, and go to state 216
 
-    $default  reduce using rule 161 (logical_and_exp)
+    $default  reduce using rule 161 (logical_or_exp)
 
 
 State 286
 
-  163 inclusive_or_exp: inclusive_or_exp OR_OP exclusive_or_exp .
-  165 exclusive_or_exp: exclusive_or_exp . XOR_OP and_exp
+  149 exp: exp . COMMA assignment_exp
+  157 conditional_exp: logical_or_exp QUES exp . COLON
 
-    XOR_OP  shift, and go to state 218
-
-    $default  reduce using rule 163 (inclusive_or_exp)
+    COLON  shift, and go to state 333
+    COMMA  shift, and go to state 262
 
 
 State 287
 
-  165 exclusive_or_exp: exclusive_or_exp XOR_OP and_exp .
-  167 and_exp: and_exp . AND_OP equality_exp
+  163 logical_and_exp: logical_and_exp AND inclusive_or_exp .
+  165 inclusive_or_exp: inclusive_or_exp . OR_OP exclusive_or_exp
 
-    AND_OP  shift, and go to state 219
+    OR_OP  shift, and go to state 217
 
-    $default  reduce using rule 165 (exclusive_or_exp)
+    $default  reduce using rule 163 (logical_and_exp)
 
 
 State 288
 
-  167 and_exp: and_exp AND_OP equality_exp .
-  169 equality_exp: equality_exp . EQUAL relational_exp
-  170             | equality_exp . NOT_EQUAL relational_exp
+  165 inclusive_or_exp: inclusive_or_exp OR_OP exclusive_or_exp .
+  167 exclusive_or_exp: exclusive_or_exp . XOR_OP and_exp
 
-    EQUAL      shift, and go to state 220
-    NOT_EQUAL  shift, and go to state 221
+    XOR_OP  shift, and go to state 218
 
-    $default  reduce using rule 167 (and_exp)
+    $default  reduce using rule 165 (inclusive_or_exp)
 
 
 State 289
 
-  169 equality_exp: equality_exp EQUAL relational_exp .
-  172 relational_exp: relational_exp . LESSER shift_expression
-  173               | relational_exp . GREATER shift_expression
-  174               | relational_exp . LEQUAL shift_expression
-  175               | relational_exp . GEQUAL shift_expression
+  167 exclusive_or_exp: exclusive_or_exp XOR_OP and_exp .
+  169 and_exp: and_exp . AND_OP equality_exp
 
-    LESSER   shift, and go to state 222
-    GREATER  shift, and go to state 223
-    LEQUAL   shift, and go to state 224
-    GEQUAL   shift, and go to state 225
+    AND_OP  shift, and go to state 219
 
-    $default  reduce using rule 169 (equality_exp)
+    $default  reduce using rule 167 (exclusive_or_exp)
 
 
 State 290
 
-  170 equality_exp: equality_exp NOT_EQUAL relational_exp .
-  172 relational_exp: relational_exp . LESSER shift_expression
-  173               | relational_exp . GREATER shift_expression
-  174               | relational_exp . LEQUAL shift_expression
-  175               | relational_exp . GEQUAL shift_expression
+  169 and_exp: and_exp AND_OP equality_exp .
+  171 equality_exp: equality_exp . EQUAL relational_exp
+  172             | equality_exp . NOT_EQUAL relational_exp
+
+    EQUAL      shift, and go to state 220
+    NOT_EQUAL  shift, and go to state 221
+
+    $default  reduce using rule 169 (and_exp)
+
+
+State 291
+
+  171 equality_exp: equality_exp EQUAL relational_exp .
+  174 relational_exp: relational_exp . LESSER shift_expression
+  175               | relational_exp . GREATER shift_expression
+  176               | relational_exp . LEQUAL shift_expression
+  177               | relational_exp . GEQUAL shift_expression
 
     LESSER   shift, and go to state 222
     GREATER  shift, and go to state 223
     LEQUAL   shift, and go to state 224
     GEQUAL   shift, and go to state 225
 
-    $default  reduce using rule 170 (equality_exp)
-
-
-State 291
-
-  172 relational_exp: relational_exp LESSER shift_expression .
-  177 shift_expression: shift_expression . MOVE_L additive_exp
-  178                 | shift_expression . MOVE_R additive_exp
-
-    MOVE_L  shift, and go to state 226
-    MOVE_R  shift, and go to state 227
-
-    $default  reduce using rule 172 (relational_exp)
+    $default  reduce using rule 171 (equality_exp)
 
 
 State 292
 
-  173 relational_exp: relational_exp GREATER shift_expression .
-  177 shift_expression: shift_expression . MOVE_L additive_exp
-  178                 | shift_expression . MOVE_R additive_exp
+  172 equality_exp: equality_exp NOT_EQUAL relational_exp .
+  174 relational_exp: relational_exp . LESSER shift_expression
+  175               | relational_exp . GREATER shift_expression
+  176               | relational_exp . LEQUAL shift_expression
+  177               | relational_exp . GEQUAL shift_expression
 
-    MOVE_L  shift, and go to state 226
-    MOVE_R  shift, and go to state 227
+    LESSER   shift, and go to state 222
+    GREATER  shift, and go to state 223
+    LEQUAL   shift, and go to state 224
+    GEQUAL   shift, and go to state 225
 
-    $default  reduce using rule 173 (relational_exp)
+    $default  reduce using rule 172 (equality_exp)
 
 
 State 293
 
-  174 relational_exp: relational_exp LEQUAL shift_expression .
-  177 shift_expression: shift_expression . MOVE_L additive_exp
-  178                 | shift_expression . MOVE_R additive_exp
+  174 relational_exp: relational_exp LESSER shift_expression .
+  179 shift_expression: shift_expression . MOVE_L additive_exp
+  180                 | shift_expression . MOVE_R additive_exp
 
     MOVE_L  shift, and go to state 226
     MOVE_R  shift, and go to state 227
@@ -5692,9 +5692,9 @@ State 293
 
 State 294
 
-  175 relational_exp: relational_exp GEQUAL shift_expression .
-  177 shift_expression: shift_expression . MOVE_L additive_exp
-  178                 | shift_expression . MOVE_R additive_exp
+  175 relational_exp: relational_exp GREATER shift_expression .
+  179 shift_expression: shift_expression . MOVE_L additive_exp
+  180                 | shift_expression . MOVE_R additive_exp
 
     MOVE_L  shift, and go to state 226
     MOVE_R  shift, and go to state 227
@@ -5704,124 +5704,148 @@ State 294
 
 State 295
 
-  177 shift_expression: shift_expression MOVE_L additive_exp .
-  180 additive_exp: additive_exp . ADD mult_exp
-  181             | additive_exp . SUB mult_exp
+  176 relational_exp: relational_exp LEQUAL shift_expression .
+  179 shift_expression: shift_expression . MOVE_L additive_exp
+  180                 | shift_expression . MOVE_R additive_exp
 
-    ADD  shift, and go to state 228
-    SUB  shift, and go to state 229
+    MOVE_L  shift, and go to state 226
+    MOVE_R  shift, and go to state 227
 
-    $default  reduce using rule 177 (shift_expression)
+    $default  reduce using rule 176 (relational_exp)
 
 
 State 296
 
-  178 shift_expression: shift_expression MOVE_R additive_exp .
-  180 additive_exp: additive_exp . ADD mult_exp
-  181             | additive_exp . SUB mult_exp
+  177 relational_exp: relational_exp GEQUAL shift_expression .
+  179 shift_expression: shift_expression . MOVE_L additive_exp
+  180                 | shift_expression . MOVE_R additive_exp
 
-    ADD  shift, and go to state 228
-    SUB  shift, and go to state 229
+    MOVE_L  shift, and go to state 226
+    MOVE_R  shift, and go to state 227
 
-    $default  reduce using rule 178 (shift_expression)
+    $default  reduce using rule 177 (relational_exp)
 
 
 State 297
 
-  180 additive_exp: additive_exp ADD mult_exp .
-  183 mult_exp: mult_exp . MUL cast_exp
-  184         | mult_exp . DIV cast_exp
-  185         | mult_exp . MOD cast_exp
+  179 shift_expression: shift_expression MOVE_L additive_exp .
+  182 additive_exp: additive_exp . ADD mult_exp
+  183             | additive_exp . SUB mult_exp
 
-    MUL  shift, and go to state 230
-    DIV  shift, and go to state 231
-    MOD  shift, and go to state 232
+    ADD  shift, and go to state 228
+    SUB  shift, and go to state 229
 
-    $default  reduce using rule 180 (additive_exp)
+    $default  reduce using rule 179 (shift_expression)
 
 
 State 298
 
-  181 additive_exp: additive_exp SUB mult_exp .
-  183 mult_exp: mult_exp . MUL cast_exp
-  184         | mult_exp . DIV cast_exp
-  185         | mult_exp . MOD cast_exp
+  180 shift_expression: shift_expression MOVE_R additive_exp .
+  182 additive_exp: additive_exp . ADD mult_exp
+  183             | additive_exp . SUB mult_exp
+
+    ADD  shift, and go to state 228
+    SUB  shift, and go to state 229
+
+    $default  reduce using rule 180 (shift_expression)
+
+
+State 299
+
+  182 additive_exp: additive_exp ADD mult_exp .
+  185 mult_exp: mult_exp . MUL cast_exp
+  186         | mult_exp . DIV cast_exp
+  187         | mult_exp . MOD cast_exp
 
     MUL  shift, and go to state 230
     DIV  shift, and go to state 231
     MOD  shift, and go to state 232
 
-    $default  reduce using rule 181 (additive_exp)
-
-
-State 299
-
-  183 mult_exp: mult_exp MUL cast_exp .
-
-    $default  reduce using rule 183 (mult_exp)
+    $default  reduce using rule 182 (additive_exp)
 
 
 State 300
 
-  184 mult_exp: mult_exp DIV cast_exp .
+  183 additive_exp: additive_exp SUB mult_exp .
+  185 mult_exp: mult_exp . MUL cast_exp
+  186         | mult_exp . DIV cast_exp
+  187         | mult_exp . MOD cast_exp
 
-    $default  reduce using rule 184 (mult_exp)
+    MUL  shift, and go to state 230
+    DIV  shift, and go to state 231
+    MOD  shift, and go to state 232
+
+    $default  reduce using rule 183 (additive_exp)
 
 
 State 301
 
-  185 mult_exp: mult_exp MOD cast_exp .
+  185 mult_exp: mult_exp MUL cast_exp .
 
     $default  reduce using rule 185 (mult_exp)
 
 
 State 302
 
-  204 postfix_exp: postfix_exp DOT IDENTITY .
+  186 mult_exp: mult_exp DIV cast_exp .
 
-    $default  reduce using rule 204 (postfix_exp)
+    $default  reduce using rule 186 (mult_exp)
 
 
 State 303
 
-  203 postfix_exp: postfix_exp PARENTHESE_L PARENTHESE_R .
+  187 mult_exp: mult_exp MOD cast_exp .
 
-    $default  reduce using rule 203 (postfix_exp)
+    $default  reduce using rule 187 (mult_exp)
 
 
 State 304
 
-  212 argument_exp_list: assignment_exp .
+  206 postfix_exp: postfix_exp DOT IDENTITY .
 
-    $default  reduce using rule 212 (argument_exp_list)
+    $default  reduce using rule 206 (postfix_exp)
 
 
 State 305
 
-  202 postfix_exp: postfix_exp PARENTHESE_L argument_exp_list . PARENTHESE_R
-  213 argument_exp_list: argument_exp_list . COMMA assignment_exp
-
-    COMMA         shift, and go to state 332
-    PARENTHESE_R  shift, and go to state 333
-
-
-State 306
-
-  205 postfix_exp: postfix_exp PELEMENT IDENTITY .
+  205 postfix_exp: postfix_exp PARENTHESE_L PARENTHESE_R .
 
     $default  reduce using rule 205 (postfix_exp)
 
 
+State 306
+
+  214 argument_exp_list: assignment_exp .
+
+    $default  reduce using rule 214 (argument_exp_list)
+
+
 State 307
 
-  149 exp: exp . COMMA assignment_exp
-  201 postfix_exp: postfix_exp BRACKET_L exp . BRACKET_R
+  204 postfix_exp: postfix_exp PARENTHESE_L argument_exp_list . PARENTHESE_R
+  215 argument_exp_list: argument_exp_list . COMMA assignment_exp
 
-    COMMA      shift, and go to state 260
-    BRACKET_R  shift, and go to state 334
+    COMMA         shift, and go to state 334
+    PARENTHESE_R  shift, and go to state 335
 
 
 State 308
+
+  207 postfix_exp: postfix_exp PELEMENT IDENTITY .
+
+    $default  reduce using rule 207 (postfix_exp)
+
+
+State 309
+
+  149 exp: exp . COMMA assignment_exp
+  203 postfix_exp: postfix_exp BRACKET_L exp . BRACKET_R
+
+    COMMA      shift, and go to state 262
+    BRACKET_R  shift, and go to state 336
+
+
+State 310
 
    95 initializer: BRACE_L initializer_list COMMA . BRACE_R
    97 initializer_list: initializer_list COMMA . initializer
@@ -5835,7 +5859,7 @@ State 308
     POST_ADD      shift, and go to state 125
     POST_SUB      shift, and go to state 126
     BRACE_L       shift, and go to state 157
-    BRACE_R       shift, and go to state 335
+    BRACE_R       shift, and go to state 337
     AND_OP        shift, and go to state 128
     NOT           shift, and go to state 129
     IDENTITY      shift, and go to state 130
@@ -5843,7 +5867,7 @@ State 308
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    initializer       go to state 336
+    initializer       go to state 338
     assignment_exp    go to state 159
     conditional_exp   go to state 160
     logical_or_exp    go to state 136
@@ -5864,42 +5888,42 @@ State 308
     const_type        go to state 151
 
 
-State 309
+State 311
 
    94 initializer: BRACE_L initializer_list BRACE_R .
 
     $default  reduce using rule 94 (initializer)
 
 
-State 310
+State 312
 
   151 assignment_exp: unary_exp assignment_operator assignment_exp .
 
     $default  reduce using rule 151 (assignment_exp)
 
 
-State 311
+State 313
 
    57 struct_declarator_list: struct_declarator_list COMMA struct_declarator .
 
     $default  reduce using rule 57 (struct_declarator_list)
 
 
-State 312
+State 314
 
    59 struct_declarator: declarator COLON const_exp .
 
     $default  reduce using rule 59 (struct_declarator)
 
 
-State 313
+State 315
 
   120 labeled_stat: CASE const_exp COLON stat .
 
     $default  reduce using rule 120 (labeled_stat)
 
 
-State 314
+State 316
 
   134 iteration_stat: DO stat WHILE PARENTHESE_L . exp PARENTHESE_R SEMI
 
@@ -5909,48 +5933,6 @@ State 314
     MUL           shift, and go to state 122
     NEG           shift, and go to state 123
     PARENTHESE_L  shift, and go to state 124
-    POST_ADD      shift, and go to state 125
-    POST_SUB      shift, and go to state 126
-    AND_OP        shift, and go to state 128
-    NOT           shift, and go to state 129
-    IDENTITY      shift, and go to state 130
-    INT_NUM       shift, and go to state 131
-    FLOAT_NUM     shift, and go to state 132
-    STRING        shift, and go to state 133
-
-    exp               go to state 337
-    assignment_exp    go to state 185
-    conditional_exp   go to state 160
-    logical_or_exp    go to state 136
-    logical_and_exp   go to state 137
-    inclusive_or_exp  go to state 138
-    exclusive_or_exp  go to state 139
-    and_exp           go to state 140
-    equality_exp      go to state 141
-    relational_exp    go to state 142
-    shift_expression  go to state 143
-    additive_exp      go to state 144
-    mult_exp          go to state 145
-    cast_exp          go to state 146
-    unary_exp         go to state 161
-    unary_operator    go to state 148
-    postfix_exp       go to state 149
-    primary_exp       go to state 162
-    const_type        go to state 151
-
-
-State 315
-
-  141 iteration_stat: FOR PARENTHESE_L SEMI SEMI . exp PARENTHESE_R stat
-  142               | FOR PARENTHESE_L SEMI SEMI . PARENTHESE_R stat
-
-    SIZEOF        shift, and go to state 119
-    ADD           shift, and go to state 120
-    SUB           shift, and go to state 121
-    MUL           shift, and go to state 122
-    NEG           shift, and go to state 123
-    PARENTHESE_L  shift, and go to state 124
-    PARENTHESE_R  shift, and go to state 338
     POST_ADD      shift, and go to state 125
     POST_SUB      shift, and go to state 126
     AND_OP        shift, and go to state 128
@@ -5981,30 +5963,18 @@ State 315
     const_type        go to state 151
 
 
-State 316
-
-  139 iteration_stat: FOR PARENTHESE_L SEMI exp . SEMI exp PARENTHESE_R stat
-  140               | FOR PARENTHESE_L SEMI exp . SEMI PARENTHESE_R stat
-  149 exp: exp . COMMA assignment_exp
-
-    COMMA  shift, and go to state 260
-    SEMI   shift, and go to state 340
-
-
 State 317
 
-  135 iteration_stat: FOR PARENTHESE_L exp SEMI . exp SEMI exp PARENTHESE_R stat
-  136               | FOR PARENTHESE_L exp SEMI . exp SEMI PARENTHESE_R stat
-  137               | FOR PARENTHESE_L exp SEMI . SEMI exp PARENTHESE_R stat
-  138               | FOR PARENTHESE_L exp SEMI . SEMI PARENTHESE_R stat
+  141 iteration_stat: FOR PARENTHESE_L SEMI SEMI . exp PARENTHESE_R stat
+  142               | FOR PARENTHESE_L SEMI SEMI . PARENTHESE_R stat
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
     SUB           shift, and go to state 121
     MUL           shift, and go to state 122
     NEG           shift, and go to state 123
-    SEMI          shift, and go to state 341
     PARENTHESE_L  shift, and go to state 124
+    PARENTHESE_R  shift, and go to state 340
     POST_ADD      shift, and go to state 125
     POST_SUB      shift, and go to state 126
     AND_OP        shift, and go to state 128
@@ -6014,7 +5984,7 @@ State 317
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    exp               go to state 342
+    exp               go to state 341
     assignment_exp    go to state 185
     conditional_exp   go to state 160
     logical_or_exp    go to state 136
@@ -6037,73 +6007,62 @@ State 317
 
 State 318
 
-  130 selection_stat: IF PARENTHESE_L exp PARENTHESE_R . stat
-  131               | IF PARENTHESE_L exp PARENTHESE_R . stat ELSE stat
+  139 iteration_stat: FOR PARENTHESE_L SEMI exp . SEMI exp PARENTHESE_R stat
+  140               | FOR PARENTHESE_L SEMI exp . SEMI PARENTHESE_R stat
+  149 exp: exp . COMMA assignment_exp
 
-    BREAK     shift, and go to state 85
-    CASE      shift, and go to state 86
-    COLON     shift, and go to state 87
-    CONTINUE  shift, and go to state 88
-    DEFAULT   shift, and go to state 89
-    DO        shift, and go to state 90
-    FOR       shift, and go to state 91
-    GOTO      shift, and go to state 92
-    IF        shift, and go to state 93
-    RETURN    shift, and go to state 94
-    SWITCH    shift, and go to state 95
-    WHILE     shift, and go to state 96
-    SEMI      shift, and go to state 97
-    BRACE_L   shift, and go to state 58
-    IDENTITY  shift, and go to state 178
-
-    stat            go to state 343
-    labeled_stat    go to state 102
-    exp_stat        go to state 103
-    compound_stat   go to state 104
-    selection_stat  go to state 106
-    iteration_stat  go to state 107
-    jump_stat       go to state 108
+    COMMA  shift, and go to state 262
+    SEMI   shift, and go to state 342
 
 
 State 319
 
-  149 exp: exp COMMA assignment_exp .
+  135 iteration_stat: FOR PARENTHESE_L exp SEMI . exp SEMI exp PARENTHESE_R stat
+  136               | FOR PARENTHESE_L exp SEMI . exp SEMI PARENTHESE_R stat
+  137               | FOR PARENTHESE_L exp SEMI . SEMI exp PARENTHESE_R stat
+  138               | FOR PARENTHESE_L exp SEMI . SEMI PARENTHESE_R stat
 
-    $default  reduce using rule 149 (exp)
+    SIZEOF        shift, and go to state 119
+    ADD           shift, and go to state 120
+    SUB           shift, and go to state 121
+    MUL           shift, and go to state 122
+    NEG           shift, and go to state 123
+    SEMI          shift, and go to state 343
+    PARENTHESE_L  shift, and go to state 124
+    POST_ADD      shift, and go to state 125
+    POST_SUB      shift, and go to state 126
+    AND_OP        shift, and go to state 128
+    NOT           shift, and go to state 129
+    IDENTITY      shift, and go to state 130
+    INT_NUM       shift, and go to state 131
+    FLOAT_NUM     shift, and go to state 132
+    STRING        shift, and go to state 133
+
+    exp               go to state 344
+    assignment_exp    go to state 185
+    conditional_exp   go to state 160
+    logical_or_exp    go to state 136
+    logical_and_exp   go to state 137
+    inclusive_or_exp  go to state 138
+    exclusive_or_exp  go to state 139
+    and_exp           go to state 140
+    equality_exp      go to state 141
+    relational_exp    go to state 142
+    shift_expression  go to state 143
+    additive_exp      go to state 144
+    mult_exp          go to state 145
+    cast_exp          go to state 146
+    unary_exp         go to state 161
+    unary_operator    go to state 148
+    postfix_exp       go to state 149
+    primary_exp       go to state 162
+    const_type        go to state 151
 
 
 State 320
 
-  132 selection_stat: SWITCH PARENTHESE_L exp PARENTHESE_R . stat
-
-    BREAK     shift, and go to state 85
-    CASE      shift, and go to state 86
-    COLON     shift, and go to state 87
-    CONTINUE  shift, and go to state 88
-    DEFAULT   shift, and go to state 89
-    DO        shift, and go to state 90
-    FOR       shift, and go to state 91
-    GOTO      shift, and go to state 92
-    IF        shift, and go to state 93
-    RETURN    shift, and go to state 94
-    SWITCH    shift, and go to state 95
-    WHILE     shift, and go to state 96
-    SEMI      shift, and go to state 97
-    BRACE_L   shift, and go to state 58
-    IDENTITY  shift, and go to state 178
-
-    stat            go to state 344
-    labeled_stat    go to state 102
-    exp_stat        go to state 103
-    compound_stat   go to state 104
-    selection_stat  go to state 106
-    iteration_stat  go to state 107
-    jump_stat       go to state 108
-
-
-State 321
-
-  133 iteration_stat: WHILE PARENTHESE_L exp PARENTHESE_R . stat
+  130 selection_stat: IF PARENTHESE_L exp PARENTHESE_R . stat
+  131               | IF PARENTHESE_L exp PARENTHESE_R . stat ELSE stat
 
     BREAK     shift, and go to state 85
     CASE      shift, and go to state 86
@@ -6130,79 +6089,144 @@ State 321
     jump_stat       go to state 108
 
 
+State 321
+
+  149 exp: exp COMMA assignment_exp .
+
+    $default  reduce using rule 149 (exp)
+
+
 State 322
+
+  132 selection_stat: SWITCH PARENTHESE_L exp PARENTHESE_R . stat
+
+    BREAK     shift, and go to state 85
+    CASE      shift, and go to state 86
+    COLON     shift, and go to state 87
+    CONTINUE  shift, and go to state 88
+    DEFAULT   shift, and go to state 89
+    DO        shift, and go to state 90
+    FOR       shift, and go to state 91
+    GOTO      shift, and go to state 92
+    IF        shift, and go to state 93
+    RETURN    shift, and go to state 94
+    SWITCH    shift, and go to state 95
+    WHILE     shift, and go to state 96
+    SEMI      shift, and go to state 97
+    BRACE_L   shift, and go to state 58
+    IDENTITY  shift, and go to state 178
+
+    stat            go to state 346
+    labeled_stat    go to state 102
+    exp_stat        go to state 103
+    compound_stat   go to state 104
+    selection_stat  go to state 106
+    iteration_stat  go to state 107
+    jump_stat       go to state 108
+
+
+State 323
+
+  133 iteration_stat: WHILE PARENTHESE_L exp PARENTHESE_R . stat
+
+    BREAK     shift, and go to state 85
+    CASE      shift, and go to state 86
+    COLON     shift, and go to state 87
+    CONTINUE  shift, and go to state 88
+    DEFAULT   shift, and go to state 89
+    DO        shift, and go to state 90
+    FOR       shift, and go to state 91
+    GOTO      shift, and go to state 92
+    IF        shift, and go to state 93
+    RETURN    shift, and go to state 94
+    SWITCH    shift, and go to state 95
+    WHILE     shift, and go to state 96
+    SEMI      shift, and go to state 97
+    BRACE_L   shift, and go to state 58
+    IDENTITY  shift, and go to state 178
+
+    stat            go to state 347
+    labeled_stat    go to state 102
+    exp_stat        go to state 103
+    compound_stat   go to state 104
+    selection_stat  go to state 106
+    iteration_stat  go to state 107
+    jump_stat       go to state 108
+
+
+State 324
 
   103 direct_abstract_declarator: PARENTHESE_L abstract_declarator PARENTHESE_R .
 
     $default  reduce using rule 103 (direct_abstract_declarator)
 
 
-State 323
+State 325
 
   105 direct_abstract_declarator: BRACKET_L const_exp BRACKET_R .
 
     $default  reduce using rule 105 (direct_abstract_declarator)
 
 
-State 324
+State 326
 
   109 direct_abstract_declarator: BRACE_L param_type_list BRACE_R .
 
     $default  reduce using rule 109 (direct_abstract_declarator)
 
 
-State 325
+State 327
 
   106 direct_abstract_declarator: direct_abstract_declarator BRACKET_L BRACKET_R .
 
     $default  reduce using rule 106 (direct_abstract_declarator)
 
 
-State 326
+State 328
 
   104 direct_abstract_declarator: direct_abstract_declarator BRACKET_L const_exp . BRACKET_R
 
-    BRACKET_R  shift, and go to state 346
+    BRACKET_R  shift, and go to state 348
 
 
-State 327
+State 329
 
   110 direct_abstract_declarator: direct_abstract_declarator BRACE_L BRACE_R .
 
     $default  reduce using rule 110 (direct_abstract_declarator)
 
 
-State 328
+State 330
 
   108 direct_abstract_declarator: direct_abstract_declarator BRACE_L param_type_list . BRACE_R
 
-    BRACE_R  shift, and go to state 347
-
-
-State 329
-
-  193 unary_exp: SIZEOF PARENTHESE_L type_name PARENTHESE_R .
-
-    $default  reduce using rule 193 (unary_exp)
-
-
-State 330
-
-  187 cast_exp: PARENTHESE_L type_name PARENTHESE_R cast_exp .
-
-    $default  reduce using rule 187 (cast_exp)
+    BRACE_R  shift, and go to state 349
 
 
 State 331
 
-  155 conditional_exp: logical_or_exp QUES exp COLON .
+  195 unary_exp: SIZEOF PARENTHESE_L type_name PARENTHESE_R .
 
-    $default  reduce using rule 155 (conditional_exp)
+    $default  reduce using rule 195 (unary_exp)
 
 
 State 332
 
-  213 argument_exp_list: argument_exp_list COMMA . assignment_exp
+  189 cast_exp: PARENTHESE_L type_name PARENTHESE_R cast_exp .
+
+    $default  reduce using rule 189 (cast_exp)
+
+
+State 333
+
+  157 conditional_exp: logical_or_exp QUES exp COLON .
+
+    $default  reduce using rule 157 (conditional_exp)
+
+
+State 334
+
+  215 argument_exp_list: argument_exp_list COMMA . assignment_exp
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -6219,7 +6243,7 @@ State 332
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    assignment_exp    go to state 348
+    assignment_exp    go to state 350
     conditional_exp   go to state 160
     logical_or_exp    go to state 136
     logical_and_exp   go to state 137
@@ -6239,44 +6263,44 @@ State 332
     const_type        go to state 151
 
 
-State 333
-
-  202 postfix_exp: postfix_exp PARENTHESE_L argument_exp_list PARENTHESE_R .
-
-    $default  reduce using rule 202 (postfix_exp)
-
-
-State 334
-
-  201 postfix_exp: postfix_exp BRACKET_L exp BRACKET_R .
-
-    $default  reduce using rule 201 (postfix_exp)
-
-
 State 335
+
+  204 postfix_exp: postfix_exp PARENTHESE_L argument_exp_list PARENTHESE_R .
+
+    $default  reduce using rule 204 (postfix_exp)
+
+
+State 336
+
+  203 postfix_exp: postfix_exp BRACKET_L exp BRACKET_R .
+
+    $default  reduce using rule 203 (postfix_exp)
+
+
+State 337
 
    95 initializer: BRACE_L initializer_list COMMA BRACE_R .
 
     $default  reduce using rule 95 (initializer)
 
 
-State 336
+State 338
 
    97 initializer_list: initializer_list COMMA initializer .
 
     $default  reduce using rule 97 (initializer_list)
 
 
-State 337
+State 339
 
   134 iteration_stat: DO stat WHILE PARENTHESE_L exp . PARENTHESE_R SEMI
   149 exp: exp . COMMA assignment_exp
 
-    COMMA         shift, and go to state 260
-    PARENTHESE_R  shift, and go to state 349
+    COMMA         shift, and go to state 262
+    PARENTHESE_R  shift, and go to state 351
 
 
-State 338
+State 340
 
   142 iteration_stat: FOR PARENTHESE_L SEMI SEMI PARENTHESE_R . stat
 
@@ -6296,7 +6320,7 @@ State 338
     BRACE_L   shift, and go to state 58
     IDENTITY  shift, and go to state 178
 
-    stat            go to state 350
+    stat            go to state 352
     labeled_stat    go to state 102
     exp_stat        go to state 103
     compound_stat   go to state 104
@@ -6305,61 +6329,19 @@ State 338
     jump_stat       go to state 108
 
 
-State 339
+State 341
 
   141 iteration_stat: FOR PARENTHESE_L SEMI SEMI exp . PARENTHESE_R stat
   149 exp: exp . COMMA assignment_exp
 
-    COMMA         shift, and go to state 260
-    PARENTHESE_R  shift, and go to state 351
+    COMMA         shift, and go to state 262
+    PARENTHESE_R  shift, and go to state 353
 
 
-State 340
+State 342
 
   139 iteration_stat: FOR PARENTHESE_L SEMI exp SEMI . exp PARENTHESE_R stat
   140               | FOR PARENTHESE_L SEMI exp SEMI . PARENTHESE_R stat
-
-    SIZEOF        shift, and go to state 119
-    ADD           shift, and go to state 120
-    SUB           shift, and go to state 121
-    MUL           shift, and go to state 122
-    NEG           shift, and go to state 123
-    PARENTHESE_L  shift, and go to state 124
-    PARENTHESE_R  shift, and go to state 352
-    POST_ADD      shift, and go to state 125
-    POST_SUB      shift, and go to state 126
-    AND_OP        shift, and go to state 128
-    NOT           shift, and go to state 129
-    IDENTITY      shift, and go to state 130
-    INT_NUM       shift, and go to state 131
-    FLOAT_NUM     shift, and go to state 132
-    STRING        shift, and go to state 133
-
-    exp               go to state 353
-    assignment_exp    go to state 185
-    conditional_exp   go to state 160
-    logical_or_exp    go to state 136
-    logical_and_exp   go to state 137
-    inclusive_or_exp  go to state 138
-    exclusive_or_exp  go to state 139
-    and_exp           go to state 140
-    equality_exp      go to state 141
-    relational_exp    go to state 142
-    shift_expression  go to state 143
-    additive_exp      go to state 144
-    mult_exp          go to state 145
-    cast_exp          go to state 146
-    unary_exp         go to state 161
-    unary_operator    go to state 148
-    postfix_exp       go to state 149
-    primary_exp       go to state 162
-    const_type        go to state 151
-
-
-State 341
-
-  137 iteration_stat: FOR PARENTHESE_L exp SEMI SEMI . exp PARENTHESE_R stat
-  138               | FOR PARENTHESE_L exp SEMI SEMI . PARENTHESE_R stat
 
     SIZEOF        shift, and go to state 119
     ADD           shift, and go to state 120
@@ -6398,77 +6380,119 @@ State 341
     const_type        go to state 151
 
 
-State 342
+State 343
+
+  137 iteration_stat: FOR PARENTHESE_L exp SEMI SEMI . exp PARENTHESE_R stat
+  138               | FOR PARENTHESE_L exp SEMI SEMI . PARENTHESE_R stat
+
+    SIZEOF        shift, and go to state 119
+    ADD           shift, and go to state 120
+    SUB           shift, and go to state 121
+    MUL           shift, and go to state 122
+    NEG           shift, and go to state 123
+    PARENTHESE_L  shift, and go to state 124
+    PARENTHESE_R  shift, and go to state 356
+    POST_ADD      shift, and go to state 125
+    POST_SUB      shift, and go to state 126
+    AND_OP        shift, and go to state 128
+    NOT           shift, and go to state 129
+    IDENTITY      shift, and go to state 130
+    INT_NUM       shift, and go to state 131
+    FLOAT_NUM     shift, and go to state 132
+    STRING        shift, and go to state 133
+
+    exp               go to state 357
+    assignment_exp    go to state 185
+    conditional_exp   go to state 160
+    logical_or_exp    go to state 136
+    logical_and_exp   go to state 137
+    inclusive_or_exp  go to state 138
+    exclusive_or_exp  go to state 139
+    and_exp           go to state 140
+    equality_exp      go to state 141
+    relational_exp    go to state 142
+    shift_expression  go to state 143
+    additive_exp      go to state 144
+    mult_exp          go to state 145
+    cast_exp          go to state 146
+    unary_exp         go to state 161
+    unary_operator    go to state 148
+    postfix_exp       go to state 149
+    primary_exp       go to state 162
+    const_type        go to state 151
+
+
+State 344
 
   135 iteration_stat: FOR PARENTHESE_L exp SEMI exp . SEMI exp PARENTHESE_R stat
   136               | FOR PARENTHESE_L exp SEMI exp . SEMI PARENTHESE_R stat
   149 exp: exp . COMMA assignment_exp
 
-    COMMA  shift, and go to state 260
-    SEMI   shift, and go to state 356
+    COMMA  shift, and go to state 262
+    SEMI   shift, and go to state 358
 
 
-State 343
+State 345
 
   130 selection_stat: IF PARENTHESE_L exp PARENTHESE_R stat .
   131               | IF PARENTHESE_L exp PARENTHESE_R stat . ELSE stat
 
-    ELSE  shift, and go to state 357
+    ELSE  shift, and go to state 359
 
     ELSE      [reduce using rule 130 (selection_stat)]
     $default  reduce using rule 130 (selection_stat)
 
 
-State 344
+State 346
 
   132 selection_stat: SWITCH PARENTHESE_L exp PARENTHESE_R stat .
 
     $default  reduce using rule 132 (selection_stat)
 
 
-State 345
+State 347
 
   133 iteration_stat: WHILE PARENTHESE_L exp PARENTHESE_R stat .
 
     $default  reduce using rule 133 (iteration_stat)
 
 
-State 346
+State 348
 
   104 direct_abstract_declarator: direct_abstract_declarator BRACKET_L const_exp BRACKET_R .
 
     $default  reduce using rule 104 (direct_abstract_declarator)
 
 
-State 347
+State 349
 
   108 direct_abstract_declarator: direct_abstract_declarator BRACE_L param_type_list BRACE_R .
 
     $default  reduce using rule 108 (direct_abstract_declarator)
 
 
-State 348
+State 350
 
-  213 argument_exp_list: argument_exp_list COMMA assignment_exp .
+  215 argument_exp_list: argument_exp_list COMMA assignment_exp .
 
-    $default  reduce using rule 213 (argument_exp_list)
+    $default  reduce using rule 215 (argument_exp_list)
 
 
-State 349
+State 351
 
   134 iteration_stat: DO stat WHILE PARENTHESE_L exp PARENTHESE_R . SEMI
 
-    SEMI  shift, and go to state 358
+    SEMI  shift, and go to state 360
 
 
-State 350
+State 352
 
   142 iteration_stat: FOR PARENTHESE_L SEMI SEMI PARENTHESE_R stat .
 
     $default  reduce using rule 142 (iteration_stat)
 
 
-State 351
+State 353
 
   141 iteration_stat: FOR PARENTHESE_L SEMI SEMI exp PARENTHESE_R . stat
 
@@ -6488,56 +6512,18 @@ State 351
     BRACE_L   shift, and go to state 58
     IDENTITY  shift, and go to state 178
 
-    stat            go to state 359
+    stat            go to state 361
     labeled_stat    go to state 102
     exp_stat        go to state 103
     compound_stat   go to state 104
     selection_stat  go to state 106
     iteration_stat  go to state 107
     jump_stat       go to state 108
-
-
-State 352
-
-  140 iteration_stat: FOR PARENTHESE_L SEMI exp SEMI PARENTHESE_R . stat
-
-    BREAK     shift, and go to state 85
-    CASE      shift, and go to state 86
-    COLON     shift, and go to state 87
-    CONTINUE  shift, and go to state 88
-    DEFAULT   shift, and go to state 89
-    DO        shift, and go to state 90
-    FOR       shift, and go to state 91
-    GOTO      shift, and go to state 92
-    IF        shift, and go to state 93
-    RETURN    shift, and go to state 94
-    SWITCH    shift, and go to state 95
-    WHILE     shift, and go to state 96
-    SEMI      shift, and go to state 97
-    BRACE_L   shift, and go to state 58
-    IDENTITY  shift, and go to state 178
-
-    stat            go to state 360
-    labeled_stat    go to state 102
-    exp_stat        go to state 103
-    compound_stat   go to state 104
-    selection_stat  go to state 106
-    iteration_stat  go to state 107
-    jump_stat       go to state 108
-
-
-State 353
-
-  139 iteration_stat: FOR PARENTHESE_L SEMI exp SEMI exp . PARENTHESE_R stat
-  149 exp: exp . COMMA assignment_exp
-
-    COMMA         shift, and go to state 260
-    PARENTHESE_R  shift, and go to state 361
 
 
 State 354
 
-  138 iteration_stat: FOR PARENTHESE_L exp SEMI SEMI PARENTHESE_R . stat
+  140 iteration_stat: FOR PARENTHESE_L SEMI exp SEMI PARENTHESE_R . stat
 
     BREAK     shift, and go to state 85
     CASE      shift, and go to state 86
@@ -6566,14 +6552,52 @@ State 354
 
 State 355
 
-  137 iteration_stat: FOR PARENTHESE_L exp SEMI SEMI exp . PARENTHESE_R stat
+  139 iteration_stat: FOR PARENTHESE_L SEMI exp SEMI exp . PARENTHESE_R stat
   149 exp: exp . COMMA assignment_exp
 
-    COMMA         shift, and go to state 260
+    COMMA         shift, and go to state 262
     PARENTHESE_R  shift, and go to state 363
 
 
 State 356
+
+  138 iteration_stat: FOR PARENTHESE_L exp SEMI SEMI PARENTHESE_R . stat
+
+    BREAK     shift, and go to state 85
+    CASE      shift, and go to state 86
+    COLON     shift, and go to state 87
+    CONTINUE  shift, and go to state 88
+    DEFAULT   shift, and go to state 89
+    DO        shift, and go to state 90
+    FOR       shift, and go to state 91
+    GOTO      shift, and go to state 92
+    IF        shift, and go to state 93
+    RETURN    shift, and go to state 94
+    SWITCH    shift, and go to state 95
+    WHILE     shift, and go to state 96
+    SEMI      shift, and go to state 97
+    BRACE_L   shift, and go to state 58
+    IDENTITY  shift, and go to state 178
+
+    stat            go to state 364
+    labeled_stat    go to state 102
+    exp_stat        go to state 103
+    compound_stat   go to state 104
+    selection_stat  go to state 106
+    iteration_stat  go to state 107
+    jump_stat       go to state 108
+
+
+State 357
+
+  137 iteration_stat: FOR PARENTHESE_L exp SEMI SEMI exp . PARENTHESE_R stat
+  149 exp: exp . COMMA assignment_exp
+
+    COMMA         shift, and go to state 262
+    PARENTHESE_R  shift, and go to state 365
+
+
+State 358
 
   135 iteration_stat: FOR PARENTHESE_L exp SEMI exp SEMI . exp PARENTHESE_R stat
   136               | FOR PARENTHESE_L exp SEMI exp SEMI . PARENTHESE_R stat
@@ -6584,7 +6608,7 @@ State 356
     MUL           shift, and go to state 122
     NEG           shift, and go to state 123
     PARENTHESE_L  shift, and go to state 124
-    PARENTHESE_R  shift, and go to state 364
+    PARENTHESE_R  shift, and go to state 366
     POST_ADD      shift, and go to state 125
     POST_SUB      shift, and go to state 126
     AND_OP        shift, and go to state 128
@@ -6594,7 +6618,7 @@ State 356
     FLOAT_NUM     shift, and go to state 132
     STRING        shift, and go to state 133
 
-    exp               go to state 365
+    exp               go to state 367
     assignment_exp    go to state 185
     conditional_exp   go to state 160
     logical_or_exp    go to state 136
@@ -6615,95 +6639,9 @@ State 356
     const_type        go to state 151
 
 
-State 357
-
-  131 selection_stat: IF PARENTHESE_L exp PARENTHESE_R stat ELSE . stat
-
-    BREAK     shift, and go to state 85
-    CASE      shift, and go to state 86
-    COLON     shift, and go to state 87
-    CONTINUE  shift, and go to state 88
-    DEFAULT   shift, and go to state 89
-    DO        shift, and go to state 90
-    FOR       shift, and go to state 91
-    GOTO      shift, and go to state 92
-    IF        shift, and go to state 93
-    RETURN    shift, and go to state 94
-    SWITCH    shift, and go to state 95
-    WHILE     shift, and go to state 96
-    SEMI      shift, and go to state 97
-    BRACE_L   shift, and go to state 58
-    IDENTITY  shift, and go to state 178
-
-    stat            go to state 366
-    labeled_stat    go to state 102
-    exp_stat        go to state 103
-    compound_stat   go to state 104
-    selection_stat  go to state 106
-    iteration_stat  go to state 107
-    jump_stat       go to state 108
-
-
-State 358
-
-  134 iteration_stat: DO stat WHILE PARENTHESE_L exp PARENTHESE_R SEMI .
-
-    $default  reduce using rule 134 (iteration_stat)
-
-
 State 359
 
-  141 iteration_stat: FOR PARENTHESE_L SEMI SEMI exp PARENTHESE_R stat .
-
-    $default  reduce using rule 141 (iteration_stat)
-
-
-State 360
-
-  140 iteration_stat: FOR PARENTHESE_L SEMI exp SEMI PARENTHESE_R stat .
-
-    $default  reduce using rule 140 (iteration_stat)
-
-
-State 361
-
-  139 iteration_stat: FOR PARENTHESE_L SEMI exp SEMI exp PARENTHESE_R . stat
-
-    BREAK     shift, and go to state 85
-    CASE      shift, and go to state 86
-    COLON     shift, and go to state 87
-    CONTINUE  shift, and go to state 88
-    DEFAULT   shift, and go to state 89
-    DO        shift, and go to state 90
-    FOR       shift, and go to state 91
-    GOTO      shift, and go to state 92
-    IF        shift, and go to state 93
-    RETURN    shift, and go to state 94
-    SWITCH    shift, and go to state 95
-    WHILE     shift, and go to state 96
-    SEMI      shift, and go to state 97
-    BRACE_L   shift, and go to state 58
-    IDENTITY  shift, and go to state 178
-
-    stat            go to state 367
-    labeled_stat    go to state 102
-    exp_stat        go to state 103
-    compound_stat   go to state 104
-    selection_stat  go to state 106
-    iteration_stat  go to state 107
-    jump_stat       go to state 108
-
-
-State 362
-
-  138 iteration_stat: FOR PARENTHESE_L exp SEMI SEMI PARENTHESE_R stat .
-
-    $default  reduce using rule 138 (iteration_stat)
-
-
-State 363
-
-  137 iteration_stat: FOR PARENTHESE_L exp SEMI SEMI exp PARENTHESE_R . stat
+  131 selection_stat: IF PARENTHESE_L exp PARENTHESE_R stat ELSE . stat
 
     BREAK     shift, and go to state 85
     CASE      shift, and go to state 86
@@ -6730,9 +6668,30 @@ State 363
     jump_stat       go to state 108
 
 
-State 364
+State 360
 
-  136 iteration_stat: FOR PARENTHESE_L exp SEMI exp SEMI PARENTHESE_R . stat
+  134 iteration_stat: DO stat WHILE PARENTHESE_L exp PARENTHESE_R SEMI .
+
+    $default  reduce using rule 134 (iteration_stat)
+
+
+State 361
+
+  141 iteration_stat: FOR PARENTHESE_L SEMI SEMI exp PARENTHESE_R stat .
+
+    $default  reduce using rule 141 (iteration_stat)
+
+
+State 362
+
+  140 iteration_stat: FOR PARENTHESE_L SEMI exp SEMI PARENTHESE_R stat .
+
+    $default  reduce using rule 140 (iteration_stat)
+
+
+State 363
+
+  139 iteration_stat: FOR PARENTHESE_L SEMI exp SEMI exp PARENTHESE_R . stat
 
     BREAK     shift, and go to state 85
     CASE      shift, and go to state 86
@@ -6759,46 +6718,45 @@ State 364
     jump_stat       go to state 108
 
 
+State 364
+
+  138 iteration_stat: FOR PARENTHESE_L exp SEMI SEMI PARENTHESE_R stat .
+
+    $default  reduce using rule 138 (iteration_stat)
+
+
 State 365
 
-  135 iteration_stat: FOR PARENTHESE_L exp SEMI exp SEMI exp . PARENTHESE_R stat
-  149 exp: exp . COMMA assignment_exp
+  137 iteration_stat: FOR PARENTHESE_L exp SEMI SEMI exp PARENTHESE_R . stat
 
-    COMMA         shift, and go to state 260
-    PARENTHESE_R  shift, and go to state 370
+    BREAK     shift, and go to state 85
+    CASE      shift, and go to state 86
+    COLON     shift, and go to state 87
+    CONTINUE  shift, and go to state 88
+    DEFAULT   shift, and go to state 89
+    DO        shift, and go to state 90
+    FOR       shift, and go to state 91
+    GOTO      shift, and go to state 92
+    IF        shift, and go to state 93
+    RETURN    shift, and go to state 94
+    SWITCH    shift, and go to state 95
+    WHILE     shift, and go to state 96
+    SEMI      shift, and go to state 97
+    BRACE_L   shift, and go to state 58
+    IDENTITY  shift, and go to state 178
+
+    stat            go to state 370
+    labeled_stat    go to state 102
+    exp_stat        go to state 103
+    compound_stat   go to state 104
+    selection_stat  go to state 106
+    iteration_stat  go to state 107
+    jump_stat       go to state 108
 
 
 State 366
 
-  131 selection_stat: IF PARENTHESE_L exp PARENTHESE_R stat ELSE stat .
-
-    $default  reduce using rule 131 (selection_stat)
-
-
-State 367
-
-  139 iteration_stat: FOR PARENTHESE_L SEMI exp SEMI exp PARENTHESE_R stat .
-
-    $default  reduce using rule 139 (iteration_stat)
-
-
-State 368
-
-  137 iteration_stat: FOR PARENTHESE_L exp SEMI SEMI exp PARENTHESE_R stat .
-
-    $default  reduce using rule 137 (iteration_stat)
-
-
-State 369
-
-  136 iteration_stat: FOR PARENTHESE_L exp SEMI exp SEMI PARENTHESE_R stat .
-
-    $default  reduce using rule 136 (iteration_stat)
-
-
-State 370
-
-  135 iteration_stat: FOR PARENTHESE_L exp SEMI exp SEMI exp PARENTHESE_R . stat
+  136 iteration_stat: FOR PARENTHESE_L exp SEMI exp SEMI PARENTHESE_R . stat
 
     BREAK     shift, and go to state 85
     CASE      shift, and go to state 86
@@ -6825,7 +6783,73 @@ State 370
     jump_stat       go to state 108
 
 
+State 367
+
+  135 iteration_stat: FOR PARENTHESE_L exp SEMI exp SEMI exp . PARENTHESE_R stat
+  149 exp: exp . COMMA assignment_exp
+
+    COMMA         shift, and go to state 262
+    PARENTHESE_R  shift, and go to state 372
+
+
+State 368
+
+  131 selection_stat: IF PARENTHESE_L exp PARENTHESE_R stat ELSE stat .
+
+    $default  reduce using rule 131 (selection_stat)
+
+
+State 369
+
+  139 iteration_stat: FOR PARENTHESE_L SEMI exp SEMI exp PARENTHESE_R stat .
+
+    $default  reduce using rule 139 (iteration_stat)
+
+
+State 370
+
+  137 iteration_stat: FOR PARENTHESE_L exp SEMI SEMI exp PARENTHESE_R stat .
+
+    $default  reduce using rule 137 (iteration_stat)
+
+
 State 371
+
+  136 iteration_stat: FOR PARENTHESE_L exp SEMI exp SEMI PARENTHESE_R stat .
+
+    $default  reduce using rule 136 (iteration_stat)
+
+
+State 372
+
+  135 iteration_stat: FOR PARENTHESE_L exp SEMI exp SEMI exp PARENTHESE_R . stat
+
+    BREAK     shift, and go to state 85
+    CASE      shift, and go to state 86
+    COLON     shift, and go to state 87
+    CONTINUE  shift, and go to state 88
+    DEFAULT   shift, and go to state 89
+    DO        shift, and go to state 90
+    FOR       shift, and go to state 91
+    GOTO      shift, and go to state 92
+    IF        shift, and go to state 93
+    RETURN    shift, and go to state 94
+    SWITCH    shift, and go to state 95
+    WHILE     shift, and go to state 96
+    SEMI      shift, and go to state 97
+    BRACE_L   shift, and go to state 58
+    IDENTITY  shift, and go to state 178
+
+    stat            go to state 373
+    labeled_stat    go to state 102
+    exp_stat        go to state 103
+    compound_stat   go to state 104
+    selection_stat  go to state 106
+    iteration_stat  go to state 107
+    jump_stat       go to state 108
+
+
+State 373
 
   135 iteration_stat: FOR PARENTHESE_L exp SEMI exp SEMI exp PARENTHESE_R stat .
 

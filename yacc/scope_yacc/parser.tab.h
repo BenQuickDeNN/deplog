@@ -123,13 +123,15 @@ extern int yydebug;
     NOT_EQUAL = 333,
     LEQUAL = 334,
     GEQUAL = 335,
-    ASSIGN_OP = 336,
-    ASSIGN = 337,
-    QUES = 338,
-    IDENTITY = 339,
-    INT_NUM = 340,
-    FLOAT_NUM = 341,
-    STRING = 342
+    ASSIGN = 336,
+    QUES = 337,
+    ASSIGN_OP = 338,
+    ASSIGN_SHIFTL = 339,
+    ASSIGN_SHIFTR = 340,
+    IDENTITY = 341,
+    INT_NUM = 342,
+    FLOAT_NUM = 343,
+    STRING = 344
   };
 #endif
 
@@ -143,7 +145,7 @@ union YYSTYPE
     int intval;
     char *strval;
 
-#line 147 "parser.tab.h" /* yacc.c:1909  */
+#line 149 "parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
