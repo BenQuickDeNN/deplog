@@ -1,5 +1,5 @@
 # Introduction
-DePLoG: an automatic parallelizer, to detect and expose potential SIMDizable loops, and generate vectorizable codes.
+DePLoG: an automatic parallelizer, to detect and expose potentially SIMDizable loops, and generate vectorizable codes.
 
 # Workflow
 1. Extract the codes in the scope that surrounded by "#pragma deplog" and "#pragma enddep" pair.
