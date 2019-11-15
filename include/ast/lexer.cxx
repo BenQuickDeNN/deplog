@@ -425,7 +425,7 @@ bool deplog::isdiv(const char& c)
 }
 bool deplog::iskeyword(const std::string& str)
 {
-    return str.c_str() == "for" || str.c_str() == "int";
+    return !str.compare("for") || !str.compare("int");
 }
 bool deplog::iscomment_line(const std::string& str)
 {
